@@ -1,0 +1,12 @@
+# robots.txt para Gente Networking Landing Pages
+
+User-agent: *
+Allow: /
+Allow: /participe
+Allow: /gentehub
+
+# Bloquear dashboard administrativo
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://gentenetworking.com.br/sitemap.xml
