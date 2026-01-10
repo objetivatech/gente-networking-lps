@@ -183,3 +183,10 @@
 - [ ] Testar scripts corrigidos no Cloudflare D1
 - [x] Atualizar documentação com instruções corretas
 - [ ] Enviar correções para o GitHub
+
+## Documentação de Configuração de Domínio e Subpastas
+- [x] Criar guia detalhado de configuração de subdomínio
+- [x] Documentar opções de proxy/redirect
+- [x] Criar instruções para Cloudflare Workers (roteamento)
+- [x] Documentar configuração de DNS
+- [ ] Enviar documentação para o GitHub
