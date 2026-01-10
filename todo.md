@@ -169,3 +169,10 @@
 - [x] Sistema de redirecionamento para grupo via link
 - [x] Campo editável no dashboard para link do grupo
 - [x] Modal pós-formulário com informações do grupo
+
+## Correção de Scripts SQL para Cloudflare D1
+- [x] Criar scripts SQL individuais para cada tabela
+- [x] Organizar scripts em ordem de dependências
+- [x] Remover foreign keys problemáticas ou ajustar ordem
+- [x] Atualizar documentação com ordem correta de execução
+- [ ] Testar scripts no Cloudflare D1

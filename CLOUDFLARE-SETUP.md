@@ -67,20 +67,32 @@ O Cloudflare D1 é um banco de dados SQL serverless baseado em SQLite, ideal par
    - **Location**: Escolha a região mais próxima (ex: Western North America)
 6. Clique em **Create**
 
-### Passo 2: Executar as Migrações do Banco de Dados
+#### Passo 2: Executar as Migrações do Banco de Dados
 
-Após criar o banco, você precisa criar as tabelas. O projeto já possui os scripts SQL de migração na pasta `drizzle/`.
+Após criar o banco, você precisa criar as tabelas. **IMPORTANTE**: Os scripts SQL foram organizados em arquivos individuais no diretório `cloudflare-d1-scripts/` e devem ser executados **NA ORDEM NUMÉRICA** (01, 02, 03, etc.) para evitar erros de dependências.
 
-#### Opção A: Via Dashboard do Cloudflare (Recomendado para Iniciantes)
+#### Opção A: Via Dashboard do Cloudflare (Recomendado)
 
 1. No dashboard do D1, clique no banco `gente-networking-db`
 2. Clique na aba **Console**
-3. Copie e cole o conteúdo do arquivo `drizzle/0001_public_karma.sql` (localizado no projeto)
-4. Clique em **Execute**
-5. Verifique se as tabelas foram criadas com sucesso
+3. Execute cada script SQL **NA ORDEM**:
+   - Copie o conteúdo de `cloudflare-d1-scripts/01-create-users.sql`
+   - Cole no console e clique em **Execute**
+   - Repita para os scripts 02, 03, 04, 05, 06, 07, 08 e 09
+4. Verifique se as tabelas foram criadas com sucesso
 
-#### Opção B: Via Wrangler CLI (Recomendado para Desenvolvedores)
+**Ordem de Execução dos Scripts:**
+1. `01-create-users.sql` - Tabela de usuários
+2. `02-create-leads.sql` - Tabela de leads
+3. `03-create-page-content.sql` - Conteúdo editável
+4. `04-create-events.sql` - Eventos
+5. `05-create-testimonials.sql` - Depoimentos
+6. `06-create-faqs.sql` - FAQs
+7. `07-create-images.sql` - Imagens
+8. `08-create-event-settings.sql` - Configurações de eventos
+9. `09-create-email-notifications.sql` - Notificações por email
 
+#### Opção B: Via Wrangler CLI
 ```bash
 # Instalar Wrangler CLI globalmente
 npm install -g wrangler
@@ -88,9 +100,19 @@ npm install -g wrangler
 # Fazer login no Cloudflare
 wrangler login
 
-# Executar migração
-wrangler d1 execute gente-networking-db --file=./drizzle/0001_public_karma.sql
+# Executar migrações NA ORDEM
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/01-create-users.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/02-create-leads.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/03-create-page-content.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/04-create-events.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/05-create-testimonials.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/06-create-faqs.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/07-create-images.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/08-create-event-settings.sql
+wrangler d1 execute gente-networking-db --file=./cloudflare-d1-scripts/09-create-email-notifications.sql
 ```
+
+**Consulte o arquivo `cloudflare-d1-scripts/README.md` para instruções detalhadas e script automatizado.**
 
 ### Passo 3: Verificar as Tabelas Criadas
 
@@ -101,13 +123,15 @@ SELECT name FROM sqlite_master WHERE type='table';
 ```
 
 Você deve ver as seguintes tabelas:
-- `users`
-- `leads`
-- `page_content`
-- `events`
-- `testimonials`
-- `faqs`
-- `images`
+- `users` - Usuários do sistema
+- `leads` - Leads capturados dos formulários
+- `page_content` - Conteúdo editável das páginas
+- `events` - Eventos do Gente HUB
+- `testimonials` - Depoimentos de membros
+- `faqs` - Perguntas frequentes
+- `images` - Imagens hospedadas no R2
+- `event_settings` - Configurações dos eventos (link WhatsApp, datas)
+- `email_notifications` - Controle de notificações por email
 
 ### Passo 4: Inserir Dados Iniciais (Opcional)
 
