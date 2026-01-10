@@ -11,8 +11,3 @@ CREATE TABLE IF NOT EXISTS event_settings (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_event_settings_eventId ON event_settings(eventId);
-CREATE INDEX IF NOT EXISTS idx_event_settings_isActive ON event_settings(isActive);
-CREATE INDEX IF NOT EXISTS idx_event_settings_eventDate ON event_settings(eventDate);

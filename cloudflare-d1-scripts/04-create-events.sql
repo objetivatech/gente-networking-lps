@@ -19,7 +19,3 @@ CREATE TABLE IF NOT EXISTS events (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_events_eventDate ON events(eventDate);
-CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);

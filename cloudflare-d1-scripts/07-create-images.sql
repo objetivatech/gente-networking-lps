@@ -15,9 +15,3 @@ CREATE TABLE IF NOT EXISTS images (
   section VARCHAR(100),
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_images_uploadedBy ON images(uploadedBy);
-CREATE INDEX IF NOT EXISTS idx_images_page ON images(page);
-CREATE INDEX IF NOT EXISTS idx_images_section ON images(section);
-CREATE INDEX IF NOT EXISTS idx_images_r2Key ON images(r2Key);

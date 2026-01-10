@@ -12,7 +12,3 @@ CREATE TABLE IF NOT EXISTS page_content (
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   UNIQUE(page, section, contentKey)
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_page_content_page ON page_content(page);
-CREATE INDEX IF NOT EXISTS idx_page_content_section ON page_content(section);

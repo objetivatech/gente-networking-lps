@@ -14,8 +14,3 @@ CREATE TABLE IF NOT EXISTS testimonials (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_testimonials_page ON testimonials(page);
-CREATE INDEX IF NOT EXISTS idx_testimonials_isActive ON testimonials(isActive);
-CREATE INDEX IF NOT EXISTS idx_testimonials_displayOrder ON testimonials(displayOrder);

@@ -176,3 +176,10 @@
 - [x] Remover foreign keys problemáticas ou ajustar ordem
 - [x] Atualizar documentação com ordem correta de execução
 - [x] Testar scripts no Cloudflare D1
+
+## Correção de Execução dos Scripts SQL no Cloudflare D1
+- [x] Analisar erro de execução no console do Cloudflare
+- [x] Separar CREATE TABLE e CREATE INDEX em comandos distintos
+- [ ] Testar scripts corrigidos no Cloudflare D1
+- [x] Atualizar documentação com instruções corretas
+- [ ] Enviar correções para o GitHub

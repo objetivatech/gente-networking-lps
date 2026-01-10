@@ -12,7 +12,3 @@ CREATE TABLE IF NOT EXISTS users (
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   lastSignedIn DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_users_openId ON users(openId);
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);

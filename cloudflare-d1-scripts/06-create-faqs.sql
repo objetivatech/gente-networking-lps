@@ -11,8 +11,3 @@ CREATE TABLE IF NOT EXISTS faqs (
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
--- Índices para otimização
-CREATE INDEX IF NOT EXISTS idx_faqs_page ON faqs(page);
-CREATE INDEX IF NOT EXISTS idx_faqs_isActive ON faqs(isActive);
-CREATE INDEX IF NOT EXISTS idx_faqs_displayOrder ON faqs(displayOrder);
