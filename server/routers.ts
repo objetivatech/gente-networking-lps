@@ -43,10 +43,32 @@ export const appRouter = router({
     list: protectedProcedure.query(async () => {
       return await db.getAllLeads();
     }),
-    bySource: publicProcedure
+     getBySource: publicProcedure
       .input(z.enum(["participe", "gentehub"]))
       .query(async ({ input }) => {
-        return await db.getLeadsBySource(input);
+        return db.getLeadsBySource(input);
+      }),
+    exportCSV: protectedProcedure
+      .input(z.object({
+        source: z.enum(["participe", "gentehub", "all"]).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { leadsToCSV, generateCSVFilename } = await import("./export-leads");
+        
+        let leads;
+        if (input.source && input.source !== "all") {
+          leads = await db.getLeadsBySource(input.source);
+        } else {
+          leads = await db.getAllLeads();
+        }
+        
+        const csv = leadsToCSV(leads);
+        const filename = generateCSVFilename(input.source === "all" ? undefined : input.source);
+        
+        return {
+          csv,
+          filename,
+        };
       }),
     updateStatus: protectedProcedure
       .input(z.object({
@@ -212,6 +234,56 @@ export const appRouter = router({
       .input(z.number())
       .mutation(async ({ input }) => {
         await db.deleteFaq(input);
+        return { success: true };
+      }),
+  }),
+
+  // Event Settings router
+  eventSettings: router({
+    getActive: publicProcedure.query(async () => {
+      const { getActiveEventSettings } = await import("./event-settings-db");
+      return getActiveEventSettings();
+    }),
+    update: protectedProcedure
+      .input(
+        z.object({
+          eventId: z.number(),
+          whatsappGroupLink: z.string().optional(),
+          eventDate: z.date(),
+          eventEndTime: z.date(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { createEventSettings, deactivateAllEventSettings } = await import(
+          "./event-settings-db"
+        );
+        await deactivateAllEventSettings();
+        await createEventSettings({
+          ...input,
+          isActive: 1,
+        });
+        return { success: true };
+      }),
+  }),
+
+  // Email Notifications router
+  emailNotifications: router({
+    getAll: protectedProcedure.query(async () => {
+      const { getAllNotifications } = await import("./event-settings-db");
+      return getAllNotifications();
+    }),
+    getByLead: protectedProcedure
+      .input(z.object({ leadId: z.number() }))
+      .query(async ({ input }) => {
+        const { getNotificationsByLeadId } = await import("./event-settings-db");
+        return getNotificationsByLeadId(input.leadId);
+      }),
+    triggerProcessing: protectedProcedure
+      .mutation(async () => {
+        const { triggerNotificationProcessing } = await import(
+          "./notification-scheduler"
+        );
+        await triggerNotificationProcessing();
         return { success: true };
       }),
   }),

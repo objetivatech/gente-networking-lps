@@ -26,7 +26,45 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Tabela de leads capturados nas landing pages
+ * Event settings table for storing event-specific configurations
+ * like WhatsApp group link, event date/time, etc.
+ */
+export const eventSettings = mysqlTable("event_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  eventId: int("eventId").notNull(),
+  whatsappGroupLink: text("whatsappGroupLink"),
+  eventDate: timestamp("eventDate").notNull(),
+  eventEndTime: timestamp("eventEndTime").notNull(),
+  isActive: int("isActive").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EventSettings = typeof eventSettings.$inferSelect;
+export type InsertEventSettings = typeof eventSettings.$inferInsert;
+
+/**
+ * Email notifications table for tracking scheduled and sent emails
+ */
+export const emailNotifications = mysqlTable("email_notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  leadId: int("leadId").notNull(),
+  eventId: int("eventId").notNull(),
+  notificationType: mysqlEnum("notificationType", ["confirmation", "reminder_5days", "reminder_2days", "reminder_2hours"]).notNull(),
+  scheduledFor: timestamp("scheduledFor").notNull(),
+  sentAt: timestamp("sentAt"),
+  status: mysqlEnum("status", ["pending", "sent", "failed"]).default("pending").notNull(),
+  errorMessage: text("errorMessage"),
+  retryCount: int("retryCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EmailNotification = typeof emailNotifications.$inferSelect;
+export type InsertEmailNotification = typeof emailNotifications.$inferInsert;
+
+/**
+ * Leads table for storing leads captured from landing pages
  */
 export const leads = mysqlTable("leads", {
   id: int("id").autoincrement().primaryKey(),

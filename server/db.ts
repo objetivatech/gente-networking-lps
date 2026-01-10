@@ -123,6 +123,14 @@ export async function createLead(lead: InsertLead): Promise<Lead> {
   return inserted[0]!;
 }
 
+export async function getLeadById(id: number): Promise<Lead | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(leads).where(eq(leads.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
 export async function getAllLeads(): Promise<Lead[]> {
   const db = await getDb();
   if (!db) return [];

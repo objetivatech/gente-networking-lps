@@ -106,5 +106,66 @@
 - [x] Criar repositório GitHub
 - [x] Configurar GitHub Actions (se necessário)
 - [x] Preparar documentação de deploy
-- [ ] Criar checkpoint final
-- [ ] Validar todas as funcionalidades
+- [x] Criar checkpoint final
+- [x] Validar todas as funcionalidades
+
+## Novos Recursos Solicitados
+
+### Modal WhatsApp e Grupo Pré-Evento
+- [x] Criar modal pós-formulário /gentehub com informações do grupo WhatsApp
+- [x] Implementar redirecionamento automático para grupo WhatsApp
+- [x] Adicionar campo editável no dashboard para link do grupo WhatsApp
+- [x] Criar tabela no banco para armazenar configurações do evento (link WhatsApp)
+
+### Contador Regressivo com Redirecionamento
+- [x] Implementar contador regressivo para data/hora do evento
+- [x] Criar lógica de redirecionamento automático para /participe quando contador zerar
+- [x] Adicionar campo editável no dashboard para data/hora do evento
+- [x] Implementar verificação de disponibilidade da LP /gentehub
+
+### Sistema de Envio de Emails
+- [x] Configurar envio de emails para gentenetworking@gmail.com
+- [x] Criar templates HTML de email com identidade visual Gente
+- [x] Implementar envio de email ao submeter formulário /participe
+- [x] Implementar envio de email ao submeter formulário /gentehub
+- [x] Criar template de confirmação para o lead
+- [x] Criar template de notificação para o proprietário
+
+### Sistema de Notificações Automáticas
+- [x] Implementar sistema de agendamento de notificações
+- [x] Criar notificação automática 5 dias antes do evento
+- [x] Criar notificação automática 2 dias antes do evento
+- [x] Criar notificação automática 2 horas antes do evento
+- [x] Criar tabela no banco para controle de envios (email_notifications)
+- [x] Implementar worker/cron job para verificação de notificações pendentes
+
+### Dashboard de Controle de Envios
+- [ ] Criar interface de visualização de emails enviados
+- [ ] Implementar indicadores de status (enviado, falhou, pendente)
+- [ ] Adicionar funcionalidade de reenvio manual de emails
+- [ ] Criar filtros por tipo de notificação e status
+- [ ] Implementar logs detalhados de envio
+
+### Exportação de Leads
+- [x] Implementar exportação de leads para CSV
+- [ ] Implementar exportação de leads para Excel (XLSX)
+- [x] Adicionar filtros de exportação (data, origem, status)
+- [ ] Criar botão de exportação no dashboard
+
+### Editor Visual de Conteúdo
+- [ ] Implementar editor WYSIWYG para textos das LPs
+- [ ] Criar interface de edição de headlines
+- [ ] Criar interface de edição de descrições
+- [ ] Criar interface de edição de CTAs
+- [ ] Implementar preview em tempo real
+- [ ] Adicionar salvamento automático
+
+### Script de Rastreamento
+- [x] Adicionar script de rastreamento antes do </body> em /participe
+- [x] Adicionar script de rastreamento antes do </body> em /gentehub
+- [x] Testar funcionamento do rastreamento de formulários
+
+### Integração WhatsApp (Simplificada)
+- [x] Sistema de redirecionamento para grupo via link
+- [x] Campo editável no dashboard para link do grupo
+- [x] Modal pós-formulário com informações do grupo
