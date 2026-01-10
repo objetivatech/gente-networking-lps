@@ -175,4 +175,4 @@
 - [x] Organizar scripts em ordem de dependências
 - [x] Remover foreign keys problemáticas ou ajustar ordem
 - [x] Atualizar documentação com ordem correta de execução
-- [ ] Testar scripts no Cloudflare D1
+- [x] Testar scripts no Cloudflare D1
