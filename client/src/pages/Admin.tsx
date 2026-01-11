@@ -112,7 +112,7 @@ export default function Admin() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
-              <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo-gente-retangulo.png" alt="Gente Networking" className="h-14" />
+              <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo_gente_retangulo.png" alt="Gente Networking" className="h-24" />
               <h1 className="text-2xl font-bold text-[#1E5A96]">Dashboard Administrativo</h1>
             </div>
             <div className="flex items-center gap-4">
