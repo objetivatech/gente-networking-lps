@@ -4,6 +4,19 @@ export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 export const getLoginUrl = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
+  
+  // Validate required environment variables
+  if (!oauthPortalUrl) {
+    throw new Error(
+      "VITE_OAUTH_PORTAL_URL is not defined. Please configure environment variables in Cloudflare Pages settings."
+    );
+  }
+  if (!appId) {
+    throw new Error(
+      "VITE_APP_ID is not defined. Please configure environment variables in Cloudflare Pages settings."
+    );
+  }
+  
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
   const state = btoa(redirectUri);
 

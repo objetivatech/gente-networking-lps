@@ -261,4 +261,15 @@
 - [x] Implementar solução definitiva (usar window.location.origin + /api/trpc)
 - [x] Testar localmente (dashboard /admin carrega perfeitamente)
 - [ ] Testar no Cloudflare Pages (aguardando deploy do usuário)
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final (checkpoint cc572dbb)
+
+## URGENTE - Erro Invalid URL Persiste em Produção
+- [x] Pesquisar documentação Cloudflare Pages sobre SPAs
+- [x] Pesquisar documentação Cloudflare Pages sobre _redirects
+- [x] Verificar se há configuração específica necessária para Cloudflare Pages
+- [x] Identificar diferença entre ambiente local e Cloudflare Pages
+- [x] CAUSA RAIZ ENCONTRADA: getLoginUrl() em client/src/const.ts tentando criar URL com VITE_OAUTH_PORTAL_URL undefined
+- [x] Implementar solução: Adicionar validações em getLoginUrl()
+- [ ] Criar documentação de variáveis de ambiente necessárias
+- [ ] Testar localmente
+- [ ] Validar em produção
