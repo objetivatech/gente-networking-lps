@@ -194,5 +194,12 @@
 ## Correção de Build no Cloudflare Pages
 - [x] Corrigir configuração do Vite para output correto
 - [x] Testar build localmente
-- [ ] Enviar correção para o GitHub
+- [x] Enviar correção para o GitHub
 - [ ] Testar build no Cloudflare Pages
+
+## Correção do Proxy Reverso no .htaccess
+- [x] Identificar conflito com WordPress rewrite rules
+- [x] Criar configuração corrigida do .htaccess
+- [x] Documentar solução para cPanel/LiteSpeed
+- [ ] Testar acesso às rotas /participe e /gentehub
+- [ ] Enviar documentação para o GitHub
