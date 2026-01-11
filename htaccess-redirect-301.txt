@@ -1,0 +1,59 @@
+# ============================================================================
+# Gente Networking - Landing Pages Redirect 301
+# ============================================================================
+# Este arquivo contém as regras de redirecionamento para as landing pages
+# /participe e /gentehub para o subdomínio lps.gentenetworking.com.br
+#
+# INSTRUÇÕES:
+# 1. Faça backup do seu .htaccess atual
+# 2. Adicione as linhas abaixo ANTES das regras do WordPress (antes de "# BEGIN WordPress")
+# 3. Salve o arquivo
+# 4. Teste acessando https://gentenetworking.com.br/participe
+# ============================================================================
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Redirect 301 para Landing Page /participe
+RewriteRule ^participe/?(.*)$ https://lps.gentenetworking.com.br/participe/$1 [R=301,L,QSA]
+
+# Redirect 301 para Landing Page /gentehub
+RewriteRule ^gentehub/?(.*)$ https://lps.gentenetworking.com.br/gentehub/$1 [R=301,L,QSA]
+
+</IfModule>
+
+# ============================================================================
+# EXPLICAÇÃO DAS REGRAS:
+# ============================================================================
+#
+# R=301          - Redirect permanente (passa autoridade de SEO)
+# L              - Last (para de processar outras regras)
+# QSA            - Query String Append (mantém parâmetros da URL)
+# (.*)$          - Captura qualquer caminho adicional após /participe ou /gentehub
+# $1             - Insere o caminho capturado na URL de destino
+#
+# EXEMPLOS:
+# gentenetworking.com.br/participe
+#   → lps.gentenetworking.com.br/participe
+#
+# gentenetworking.com.br/gentehub?utm_source=facebook
+#   → lps.gentenetworking.com.br/gentehub?utm_source=facebook
+#
+# gentenetworking.com.br/participe/teste
+#   → lps.gentenetworking.com.br/participe/teste
+#
+# ============================================================================
+# COMPATIBILIDADE:
+# ============================================================================
+#
+# ✅ Meta Ads (Facebook/Instagram)
+# ✅ Google Ads
+# ✅ Google Analytics
+# ✅ Pixels de rastreamento
+# ✅ UTM parameters
+# ✅ SEO (301 passa autoridade)
+# ✅ WordPress
+# ✅ LiteSpeed Cache
+# ✅ cPanel
+#
+# ============================================================================

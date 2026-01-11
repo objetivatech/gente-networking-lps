@@ -216,4 +216,17 @@
 - [x] Identificar problema com arquivos CSS/JS retornando text/html
 - [x] Corrigir scripts PHP para servir arquivos estáticos corretamente
 - [ ] Testar carregamento de CSS e JS
-- [ ] Enviar correção para o GitHub
+- [x] Enviar correção para o GitHub
+
+## Diagnóstico e Correção Final do Proxy PHP
+- [x] Verificar se assets-proxy.php está sendo chamado corretamente
+- [x] Testar com URL direta do assets-proxy.php
+- [ ] Corrigir assets-proxy.php para capturar caminho completo
+- [ ] Testar novamente com caminhos corretos
+- [ ] Enviar correção final para o GitHub
+
+## Solução Final - Redirect 301 Simplificado
+- [x] Criar .htaccess com redirect 301 para subdomínio
+- [x] Atualizar documentação com solução final
+- [ ] Testar redirects /participe e /gentehub
+- [ ] Enviar solução para o GitHub
