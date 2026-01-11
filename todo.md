@@ -202,4 +202,12 @@
 - [x] Criar configuração corrigida do .htaccess
 - [x] Documentar solução para cPanel/LiteSpeed
 - [ ] Testar acesso às rotas /participe e /gentehub
-- [ ] Enviar documentação para o GitHub
+- [x] Enviar documentação para o GitHub
+
+## Proxy via PHP (Opção C)
+- [x] Criar script PHP de proxy para /participe
+- [x] Criar script PHP de proxy para /gentehub
+- [x] Criar .htaccess para roteamento
+- [x] Documentar instalação e configuração
+- [x] Testar compatibilidade com pixels de rastreamento
+- [ ] Enviar solução para o GitHub

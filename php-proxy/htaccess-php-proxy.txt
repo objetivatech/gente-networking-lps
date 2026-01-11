@@ -1,0 +1,115 @@
+# ============================================================================
+# .htaccess para Proxy PHP - Landing Pages Gente Networking
+# ============================================================================
+#
+# INSTRUÇÕES:
+# 1. Faça backup do seu .htaccess atual
+# 2. Adicione APENAS as linhas da seção "PROXY PHP" no seu .htaccess
+# 3. Coloque ANTES da seção "# BEGIN WordPress"
+# 4. Faça upload dos arquivos participe.php e gentehub.php para a raiz do site
+#
+# ============================================================================
+
+# BEGIN Really Simple Security Redirect
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{HTTP:CF-Visitor} '"scheme":"http"'
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+# END Really Simple Security Redirect
+
+# BEGIN LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+<IfModule LiteSpeed>
+RewriteEngine on
+CacheLookup on
+RewriteRule .* - [E=Cache-Control:no-autoflush]
+RewriteRule litespeed/debug/.*\.log$ - [F,L]
+RewriteRule \.litespeed_conf\.dat - [F,L]
+
+### marker ASYNC start ###
+RewriteCond %{REQUEST_URI} /wp-admin/admin-ajax\.php
+RewriteCond %{QUERY_STRING} action=async_litespeed
+RewriteRule .* - [E=noabort:1]
+### marker ASYNC end ###
+
+### marker DROPQS start ###
+CacheKeyModify -qs:fbclid
+CacheKeyModify -qs:gclid
+CacheKeyModify -qs:utm*
+CacheKeyModify -qs:_ga
+### marker DROPQS end ###
+
+</IfModule>
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END LSCACHE
+
+# BEGIN NON_LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END NON_LSCACHE
+
+# ============================================================================
+# PROXY PHP PARA LANDING PAGES
+# Redireciona /participe e /gentehub para scripts PHP que fazem proxy
+# ============================================================================
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Landing Page /participe
+RewriteRule ^participe(/.*)?$ /participe.php [L,QSA]
+
+# Landing Page /gentehub
+RewriteRule ^gentehub(/.*)?$ /gentehub.php [L,QSA]
+
+</IfModule>
+# ============================================================================
+
+# BEGIN WordPress
+# As diretrizes (linhas) entre "BEGIN WordPress" e "END WordPress" são
+# geradas dinamicamente e só devem ser modificadas através de filtros do WordPress.
+# Quaisquer alterações nas diretivas entre esses marcadores serão sobrescritas.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+# Wordfence WAF
+<IfModule LiteSpeed>
+</IfModule>
+<IfModule lsapi_module>
+</IfModule>
+<Files ".user.ini">
+<IfModule mod_authz_core.c>
+	Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+	Order deny,allow
+	Deny from all
+</IfModule>
+</Files>
+# END Wordfence WAF
+
+# BEGIN Really Simple Security No Index
+# As diretrizes (linhas) entre "BEGIN Really Simple Security No Index" e "END Really Simple Security No Index" são
+# geradas dinamicamente e só devem ser modificadas através de filtros do WordPress.
+# Quaisquer alterações nas diretivas entre esses marcadores serão sobrescritas.
+# END Really Simple Security No Index
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+</IfModule>
+<IfModule lsapi_module>
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+AddType application/x-httpd-php .html
