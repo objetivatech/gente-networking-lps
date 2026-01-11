@@ -143,6 +143,9 @@ export async function transcribeAudio(
     formData.append("prompt", prompt);
 
     // Step 4: Call the transcription service
+    if (!ENV.forgeApiUrl || ENV.forgeApiUrl === "") {
+      throw new Error("Voice transcription service baseUrl is required but was empty");
+    }
     const baseUrl = ENV.forgeApiUrl.endsWith("/")
       ? ENV.forgeApiUrl
       : `${ENV.forgeApiUrl}/`;

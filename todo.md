@@ -238,4 +238,17 @@
 - [x] Atualizar logos com arquivos do R2 (logo-gente-networking-branco.png, logo_gente_quadrado.png, logo_gente_retangulo.png)
 - [x] Aumentar tamanho dos logos para melhor visibilidade
 - [x] Testar todas as alterações
-- [ ] Salvar checkpoint final
+- [x] Salvar checkpoint final
+
+## Correção Urgente - Erro Invalid URL no Cloudflare Pages
+- [x] Investigar stack trace do erro "Invalid URL" no /admin
+- [x] Identificar qual variável de ambiente está causando o problema (ENV.forgeApiUrl vazio)
+- [x] Corrigir código para lidar com variáveis ausentes em produção
+  - [x] storage.ts: Adicionar validações em buildUploadUrl e buildDownloadUrl
+  - [x] notification.ts: Adicionar validação em buildEndpointUrl
+  - [x] voiceTranscription.ts: Adicionar validação antes de criar URL
+  - [x] map.ts: Adicionar validação em makeRequest
+  - [x] dataApi.ts e imageGeneration.ts já tinham validações adequadas
+- [x] Testar solução localmente (servidor reiniciado com sucesso)
+- [ ] Fazer deploy e testar no Cloudflare Pages
+- [ ] Salvar checkpoint com correção

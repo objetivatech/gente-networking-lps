@@ -19,6 +19,9 @@ function getStorageConfig(): StorageConfig {
 }
 
 function buildUploadUrl(baseUrl: string, relKey: string): URL {
+  if (!baseUrl || baseUrl === "") {
+    throw new Error("Storage baseUrl is required but was empty");
+  }
   const url = new URL("v1/storage/upload", ensureTrailingSlash(baseUrl));
   url.searchParams.set("path", normalizeKey(relKey));
   return url;
@@ -29,6 +32,9 @@ async function buildDownloadUrl(
   relKey: string,
   apiKey: string
 ): Promise<string> {
+  if (!baseUrl || baseUrl === "") {
+    throw new Error("Storage baseUrl is required but was empty");
+  }
   const downloadApiUrl = new URL(
     "v1/storage/downloadUrl",
     ensureTrailingSlash(baseUrl)

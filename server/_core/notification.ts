@@ -14,6 +14,9 @@ const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim().length > 0;
 
 const buildEndpointUrl = (baseUrl: string): string => {
+  if (!baseUrl || baseUrl === "") {
+    throw new Error("Notification service baseUrl is required but was empty");
+  }
   const normalizedBase = baseUrl.endsWith("/")
     ? baseUrl
     : `${baseUrl}/`;

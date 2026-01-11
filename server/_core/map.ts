@@ -58,6 +58,10 @@ export async function makeRequest<T = unknown>(
 ): Promise<T> {
   const { baseUrl, apiKey } = getMapsConfig();
 
+  if (!baseUrl || baseUrl === "") {
+    throw new Error("Maps service baseUrl is required but was empty");
+  }
+
   // Construct full URL: baseUrl + /v1/maps/proxy + endpoint
   const url = new URL(`${baseUrl}/v1/maps/proxy${endpoint}`);
 
