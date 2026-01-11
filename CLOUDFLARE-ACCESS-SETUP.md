@@ -1,162 +1,223 @@
-# Configuração do Cloudflare Access
+# Guia Completo: Configurar Cloudflare Access com Google OAuth
 
-Este guia explica como configurar o Cloudflare Access para proteger o dashboard `/admin` do seu site.
+Este guia mostra como proteger o dashboard `/admin` usando **Cloudflare Access** com autenticação Google OAuth.
 
-## O que é Cloudflare Access?
+## 📋 Pré-requisitos
 
-Cloudflare Access é um serviço de autenticação gerenciado que protege suas aplicações **antes** que elas cheguem ao seu servidor. Funciona no nível do edge da Cloudflare, oferecendo:
+- Conta no Cloudflare (gratuita)
+- Site já publicado no Cloudflare Pages
+- Conta Google para fazer login
 
-- ✅ **Zero configuração de código** - A autenticação acontece no edge
-- ✅ **Múltiplos provedores** - Google, GitHub, Microsoft, email OTP, etc
-- ✅ **Controle granular** - Defina quem pode acessar cada rota
-- ✅ **Gratuito** para até 50 usuários
+## 🎯 Visão Geral
 
-## Passo 1: Criar uma conta Cloudflare Zero Trust
+O Cloudflare Access protege seu dashboard no nível do edge (antes do código executar), usando Google OAuth para autenticação. Você define quais emails Google podem acessar, e o Cloudflare gerencia todo o fluxo de login/logout automaticamente.
 
-1. Acesse [Cloudflare Zero Trust Dashboard](https://one.dash.cloudflare.com/)
-2. Se ainda não tem, crie uma conta Zero Trust (é gratuito)
-3. Escolha um **team name** (ex: `gente-networking`)
-   - Seu team domain será: `https://gente-networking.cloudflareaccess.com`
-   - **Anote este domínio** - você vai precisar dele depois
+---
 
-## Passo 2: Configurar uma Aplicação no Cloudflare Access
+## Passo 1: Criar Conta Cloudflare Zero Trust
 
-1. No dashboard do Cloudflare Zero Trust, vá em **Access** → **Applications**
-2. Clique em **Add an application**
-3. Escolha **Self-hosted**
-4. Preencha os campos:
+1. Acesse https://one.dash.cloudflare.com/
+2. Se for sua primeira vez:
+   - Clique em **"Get started"** ou **"Começar"**
+   - Escolha um **team name** (ex: `gente-networking`)
+   - Anote o team domain que será criado: `https://gente-networking.cloudflareaccess.com`
+3. Se já tiver conta, vá para **Access** → **Applications**
 
-### Application Configuration
+---
 
-**Application name**: `Gente Networking Admin Dashboard`
+## Passo 2: Configurar Google como Provedor de Identidade
 
-**Session Duration**: `24 hours` (ou o tempo que preferir)
+Antes de criar a aplicação, você precisa adicionar Google como provedor de login:
 
-**Application domain**:
-```
-lps.gentenetworking.com.br
-```
+### 2.1 Adicionar Google OAuth
 
-**Path**: `/admin` (apenas esta rota será protegida)
+1. No painel do Cloudflare Zero Trust, vá em:
+   - **Settings** (Configurações) → **Authentication** (Autenticação)
+   
+2. Na seção **Login methods**, clique em **"Add new"** (Adicionar novo)
 
-### Add a policy
+3. Selecione **Google**
 
-**Policy name**: `Admin Access`
+4. **Opção Simplificada** (Recomendada):
+   - Deixe os campos vazios
+   - Clique em **"Save"** (Salvar)
+   - O Cloudflare usará credenciais OAuth compartilhadas (funciona perfeitamente para a maioria dos casos)
 
-**Action**: `Allow`
+5. **Opção Avançada** (Opcional - apenas se quiser usar suas próprias credenciais OAuth):
+   - Acesse [Google Cloud Console](https://console.cloud.google.com/)
+   - Crie um novo projeto ou selecione um existente
+   - Vá em **APIs & Services** → **Credentials**
+   - Clique em **"Create Credentials"** → **"OAuth 2.0 Client ID"**
+   - Configure:
+     - Application type: **Web application**
+     - Authorized redirect URIs: `https://gente-networking.cloudflareaccess.com/cdn-cgi/access/callback`
+       (substitua `gente-networking` pelo seu team name)
+   - Copie **Client ID** e **Client Secret**
+   - Cole no Cloudflare e salve
 
-**Configure rules**:
-- Escolha um método de autenticação:
-  - **Emails**: Digite seu email (ex: `seu@email.com`)
-  - **Email domain**: Digite seu domínio corporativo (ex: `@gentenetworking.com.br`)
-  - **Google**: Permite login com contas Google específicas
-  - **GitHub**: Permite login com contas GitHub específicas
+---
 
-**Exemplo** (permitir apenas seu email):
-```
-Include: Emails
-Value: seu@email.com
-```
+## Passo 3: Criar Aplicação no Cloudflare Access
 
-5. Clique em **Save application**
+Agora vamos proteger a rota `/admin`:
 
-## Passo 3: Copiar as informações necessárias
+### 3.1 Criar Nova Aplicação
 
-Após criar a aplicação, você verá uma tela com informações importantes:
+1. No Cloudflare Zero Trust, vá em:
+   - **Access** → **Applications** → **Add an application**
 
-### Application Audience (AUD) Tag
+2. Selecione **Self-hosted**
 
-Na aba **Overview** da aplicação, copie o **Application Audience (AUD) Tag**. Será algo como:
-```
-4714c1358e65fe4b408ad6d432a5f878f08194bdb4752441fd56faefa9b2b6f2
-```
+3. Configure os detalhes:
+   - **Application name**: `Gente Networking Admin Dashboard`
+   - **Session duration**: `24 hours` (ou quanto tempo quiser que o login dure)
 
-**Anote este valor** - você vai precisar dele para configurar as variáveis de ambiente.
+### 3.2 Configurar Domínio e Caminho
 
-## Passo 4: Configurar Variáveis de Ambiente no Cloudflare Pages
+Na seção **Application domain**:
 
-1. Acesse o [Cloudflare Dashboard](https://dash.cloudflare.com/)
-2. Vá em **Workers & Pages** → Selecione seu projeto
-3. Clique na aba **Settings** → **Environment variables**
-4. Adicione as seguintes variáveis:
+- **Subdomain**: `lps`
+- **Domain**: Selecione `gentenetworking.com.br` (seu domínio)
+- **Path**: `/admin`
 
-### Variáveis Necessárias
+Resultado final: `lps.gentenetworking.com.br/admin`
 
-| Variável | Valor | Onde Obter |
-|----------|-------|------------|
-| `CF_ACCESS_TEAM_DOMAIN` | `https://seu-team-name.cloudflareaccess.com` | Passo 1 - O team domain que você criou |
-| `CF_ACCESS_AUD` | `4714c1358...` | Passo 3 - Application Audience tag |
+### 3.3 Copiar Application Audience (AUD) Tag
 
-**Importante**: Adicione essas variáveis tanto em **Production** quanto em **Preview** environments.
+- Na parte inferior da página, você verá **"Application Audience (AUD) Tag"**
+- **COPIE ESTE VALOR** - você vai precisar dele nas variáveis de ambiente
+- Exemplo: `f716c3879ab3eaac78a97f1e7e94fae0de15a555e60fd48632607e6971e4b34e`
 
-5. Clique em **Save** e faça um novo deploy do site
+### 3.4 Clique em **Next** (Próximo)
 
-## Passo 5: Testar a Autenticação
+---
 
-1. Acesse `https://lps.gentenetworking.com.br/admin`
-2. Você será redirecionado automaticamente para a tela de login do Cloudflare Access
-3. Faça login com o método que você configurou (email, Google, etc)
-4. Após autenticar, você será redirecionado de volta para `/admin`
-5. O dashboard deve carregar normalmente com seus dados
+## Passo 4: Configurar Política de Acesso
 
-## Solução de Problemas
+Agora você define **quem** pode acessar o dashboard:
 
-### "Invalid token" ou "Missing CF Access JWT"
+### 4.1 Criar Política
 
-**Causa**: As variáveis de ambiente não estão configuradas corretamente.
+1. **Policy name**: `Admin Access`
 
-**Solução**:
-1. Verifique se `CF_ACCESS_TEAM_DOMAIN` e `CF_ACCESS_AUD` estão corretas
-2. Certifique-se de que o team domain inclui `https://`
-3. Faça um novo deploy após alterar as variáveis
+2. **Action**: Selecione **Allow** (Permitir)
 
-### "Access Denied" após fazer login
+3. **Configure rules** (Configurar regras):
+   
+   **Opção A: Emails Específicos** (Recomendado)
+   - Selector: **Emails**
+   - Value: Digite os emails que podem acessar, separados por vírgula
+   - Exemplo: `gentenetworking@gmail.com, seu@oespecialistaseo.com.br`
 
-**Causa**: Seu email/conta não está na lista de permitidos.
+   **Opção B: Domínio Inteiro** (Se todos do seu domínio podem acessar)
+   - Selector: **Emails ending in**
+   - Value: `@gentenetworking.com.br`
 
-**Solução**:
-1. Volte ao Cloudflare Zero Trust Dashboard
-2. Edite a aplicação → **Policies**
-3. Adicione seu email/conta na regra de **Include**
+4. Clique em **Next** → **Add application**
 
-### O login não aparece
+---
 
-**Causa**: A aplicação não está configurada corretamente no Cloudflare Access.
+## Passo 5: Configurar Variáveis de Ambiente no Cloudflare Pages
 
-**Solução**:
-1. Verifique se o domínio `lps.gentenetworking.com.br` está correto
-2. Verifique se o path `/admin` está configurado
-3. Certifique-se de que a aplicação está **ativa** (não em rascunho)
+Agora você precisa adicionar as variáveis no seu projeto:
 
-## Adicionar Mais Usuários
+### 5.1 Acessar Configurações do Projeto
 
-Para permitir que outras pessoas acessem o dashboard:
+1. Vá para o [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Clique em **Workers & Pages**
+3. Selecione seu projeto (`gente-networking-lps`)
+4. Clique na aba **Settings**
+5. Role até **Environment variables**
 
-1. Vá em **Access** → **Applications** → Edite sua aplicação
-2. Clique em **Policies** → Edite a policy
-3. Na seção **Include**, adicione:
-   - Mais emails individuais, ou
-   - Um domínio inteiro (ex: `@gentenetworking.com.br`), ou
-   - Um grupo do Google Workspace/Microsoft 365
+### 5.2 Adicionar as 2 Variáveis
 
-## Custos
+Clique em **"Add variables"** e adicione:
 
-- **Gratuito** para até 50 usuários
-- Acima de 50 usuários: $3/usuário/mês
+| Variable name | Value | Exemplo |
+|---------------|-------|---------|
+| `CF_ACCESS_TEAM_DOMAIN` | Seu team domain completo | `https://gente-networking.cloudflareaccess.com` |
+| `CF_ACCESS_AUD` | O AUD tag que você copiou no Passo 3.3 | `f716c3879ab3eaac78a97f1e7e94fae0de15a555e60fd48632607e6971e4b34e` |
 
-## Recursos Adicionais
+**IMPORTANTE**:
+- Adicione as variáveis tanto em **Production** quanto em **Preview**
+- Clique em **"Save"** após adicionar cada variável
 
-- [Documentação oficial do Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/)
-- [Validação de JWT](https://developers.cloudflare.com/cloudflare-one/identity/authorization-cookie/validating-json/)
-- [Provedores de identidade](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/)
+---
 
-## Resumo das Variáveis
+## Passo 6: Fazer Deploy e Testar
 
-Apenas **2 variáveis** são necessárias:
+### 6.1 Fazer Novo Deploy
 
-```bash
-CF_ACCESS_TEAM_DOMAIN=https://seu-team-name.cloudflareaccess.com
-CF_ACCESS_AUD=seu-application-audience-tag
-```
+1. Faça push do código para o GitHub (já feito)
+2. O Cloudflare Pages fará deploy automaticamente
+3. Aguarde o deploy completar (geralmente 2-5 minutos)
 
-Tudo mais é gerenciado pelo Cloudflare Access no edge! 🎉
+### 6.2 Testar o Acesso
+
+1. Abra uma aba anônima/privada no navegador
+2. Acesse: `https://lps.gentenetworking.com.br/admin`
+3. Você será redirecionado para a tela de login do Cloudflare Access
+4. Clique em **"Sign in with Google"**
+5. Faça login com uma das contas Google autorizadas
+6. Você será redirecionado de volta para o dashboard `/admin`
+
+---
+
+## 🎉 Pronto!
+
+Seu dashboard está protegido! Agora:
+
+- ✅ Apenas emails autorizados podem acessar `/admin`
+- ✅ Login gerenciado pelo Google OAuth (seguro e confiável)
+- ✅ Sessão dura 24 horas (configurável)
+- ✅ Cloudflare gerencia tudo no edge (zero código)
+
+---
+
+## 🔧 Troubleshooting
+
+### Erro "Invalid URL" persiste
+
+- Verifique se as 2 variáveis estão configuradas corretamente
+- Certifique-se de que `CF_ACCESS_TEAM_DOMAIN` inclui `https://`
+- Faça um novo deploy após adicionar as variáveis
+
+### "Access Denied" ao tentar fazer login
+
+- Verifique se o email que você está usando está na lista de emails autorizados
+- Vá em **Access** → **Applications** → **Gente Networking Admin Dashboard** → **Policies**
+- Edite a política e adicione o email correto
+
+### Dashboard não carrega após login bem-sucedido
+
+- Verifique se o banco de dados D1 está configurado
+- Execute os scripts SQL em `/cloudflare-d1-scripts/` seguindo a ordem do README
+
+### Quero adicionar/remover emails autorizados
+
+1. Vá em **Access** → **Applications**
+2. Clique na aplicação **Gente Networking Admin Dashboard**
+3. Clique na aba **Policies**
+4. Edite a política **Admin Access**
+5. Adicione ou remova emails
+6. Salve
+
+---
+
+## 📚 Documentação Oficial
+
+- [Cloudflare Access Documentation](https://developers.cloudflare.com/cloudflare-one/applications/)
+- [Google OAuth Setup](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/google/)
+
+---
+
+## 💡 Dicas
+
+- **Teste regularmente**: Faça logout e login novamente para garantir que tudo funciona
+- **Monitore os logs**: Vá em **Logs** no painel do Cloudflare Zero Trust para ver tentativas de acesso
+- **Adicione 2FA**: Configure autenticação de dois fatores na sua conta Google para segurança extra
+- **Sessões**: Ajuste a duração da sessão conforme necessário (4h, 12h, 24h, 1 semana)
+
+---
+
+Se tiver problemas, consulte os logs do Cloudflare Zero Trust em **Access** → **Logs** para ver detalhes das tentativas de autenticação.

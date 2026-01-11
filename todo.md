@@ -292,3 +292,11 @@
 - [x] Testar autenticação localmente (funciona - aguarda config em produção)
 - [ ] Usuário deve seguir CLOUDFLARE-ACCESS-SETUP.md
 - [ ] Testar autenticação no Cloudflare Pages
+
+
+## Atualização Cloudflare Access - Google OAuth
+- [x] Atualizar CLOUDFLARE-ACCESS-SETUP.md com instruções de Google OAuth
+- [x] Remover instruções de autenticação por email (não funciona sem SMTP)
+- [x] Adicionar passo-a-passo para configurar Google como provedor de identidade
+- [ ] Usuário deve seguir guia atualizado
+- [ ] Salvar checkpoint
