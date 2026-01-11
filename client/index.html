@@ -17,10 +17,21 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <!-- Umami Analytics (opcional) -->
+    <script>
+      // Só carrega Umami se as variáveis estiverem configuradas
+      const analyticsEndpoint = '%VITE_ANALYTICS_ENDPOINT%';
+      const websiteId = '%VITE_ANALYTICS_WEBSITE_ID%';
+      
+      if (analyticsEndpoint && !analyticsEndpoint.includes('%') && 
+          websiteId && !websiteId.includes('%')) {
+        const script = document.createElement('script');
+        script.defer = true;
+        script.src = analyticsEndpoint + '/script.js';
+        script.setAttribute('data-website-id', websiteId);
+        document.head.appendChild(script);
+      }
+    </script>
     <!-- Script de rastreamento de formulários -->
     <script type="text/javascript" async src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/53c5511f-7826-461e-9c96-304a83702a17-loader.js"></script>
   </body>

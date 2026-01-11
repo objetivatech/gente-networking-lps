@@ -322,3 +322,9 @@
 - [x] Criar guia pós-deploy (SETUP-POS-DEPLOY.md)
 - [ ] Configurar bindings D1 e R2 no dashboard Cloudflare Pages
 - [ ] Fazer deploy e validar funcionamento 100% no Cloudflare
+
+## Correções de Deploy - Cloudflare Workers
+- [x] Remover configuração D1 do wrangler.toml (placeholder causando erro)
+- [x] Tornar variáveis VITE_ANALYTICS_* opcionais no código
+- [x] Atualizar documentação sobre Umami analytics (UMAMI-ANALYTICS-SETUP.md)
+- [ ] Fazer commit e validar deploy

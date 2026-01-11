@@ -2,18 +2,19 @@ name = "gente-networking-lps"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
 
-# D1 Database binding
-[[d1_databases]]
-binding = "DB"
-database_name = "gente-networking-db"
-database_id = "YOUR_D1_DATABASE_ID"  # Substituir pelo ID real do banco D1
-
-# R2 Bucket binding
-[[r2_buckets]]
-binding = "BUCKET"
-bucket_name = "gente-networking-assets"
+# IMPORTANTE: Bindings D1 e R2 devem ser configurados no dashboard do Cloudflare Pages
+# Acesse: Workers & Pages → gente-networking-lps → Settings → Functions
+# 
+# D1 Database binding:
+#   Variable name: DB
+#   D1 database: gente-networking-db
+#
+# R2 Bucket binding:
+#   Variable name: BUCKET
+#   R2 bucket: gente-networking-assets
 
 # Environment variables
 [vars]
 CF_ACCESS_TEAM_DOMAIN = "gentenetworking.cloudflareaccess.com"
-# CF_ACCESS_AUD deve ser configurado como secret via: wrangler secret put CF_ACCESS_AUD
+# CF_ACCESS_AUD deve ser configurado como secret via dashboard:
+# Settings → Environment variables → Add variable → Encrypt
