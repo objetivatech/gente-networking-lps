@@ -53,15 +53,20 @@ CacheKeyModify -qs:_ga
 # ============================================================================
 # PROXY PHP PARA LANDING PAGES
 # Redireciona /participe e /gentehub para scripts PHP que fazem proxy
+# IMPORTANTE: NÃO redireciona arquivos estáticos (CSS, JS, imagens)
 # ============================================================================
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Landing Page /participe
-RewriteRule ^participe(/.*)?$ /participe.php [L,QSA]
+# Arquivos estáticos das landing pages - redirecionar para proxy
+RewriteCond %{REQUEST_URI} ^/(participe|gentehub)/.*\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|webp|mp4|webm|pdf)$ [NC]
+RewriteRule .* /assets-proxy.php [L,QSA]
 
-# Landing Page /gentehub
-RewriteRule ^gentehub(/.*)?$ /gentehub.php [L,QSA]
+# Landing Page /participe - apenas HTML
+RewriteRule ^participe/?$ /participe.php [L,QSA]
+
+# Landing Page /gentehub - apenas HTML
+RewriteRule ^gentehub/?$ /gentehub.php [L,QSA]
 
 </IfModule>
 # ============================================================================

@@ -210,4 +210,10 @@
 - [x] Criar .htaccess para roteamento
 - [x] Documentar instalação e configuração
 - [x] Testar compatibilidade com pixels de rastreamento
-- [ ] Enviar solução para o GitHub
+- [x] Enviar solução para o GitHub
+
+## Correção de MIME Type no Proxy PHP
+- [x] Identificar problema com arquivos CSS/JS retornando text/html
+- [x] Corrigir scripts PHP para servir arquivos estáticos corretamente
+- [ ] Testar carregamento de CSS e JS
+- [ ] Enviar correção para o GitHub
