@@ -10,7 +10,7 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-sm border-b border-white/20">
         <div className="container mx-auto px-4 py-4">
-          <img src="/images/logo-gente-networking.png" alt="Gente Networking" className="h-12 brightness-0 invert" />
+          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo-gente-networking-branco.png" alt="Gente Networking" className="h-16" />
         </div>
       </header>
 

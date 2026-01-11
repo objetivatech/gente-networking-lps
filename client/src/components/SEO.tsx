@@ -89,7 +89,7 @@ export const createOrganizationSchema = () => ({
   "@type": "Organization",
   "name": "Gente Networking",
   "url": "https://gentenetworking.com.br",
-  "logo": "https://gentenetworking.com.br/images/logo-gente-networking.png",
+  "logo": "https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo-gente-retangulo.png",
   "description": "Grupo de Networking Empresarial que conecta empresários e profissionais para gerar negócios através de relacionamentos estratégicos",
   "sameAs": [
     "https://www.linkedin.com/company/gente-networking",
