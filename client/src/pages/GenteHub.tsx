@@ -78,7 +78,7 @@ export default function GenteHub() {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo_gente_retangulo.png" alt="Gente Networking" className="h-16" />
+          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo_gente_retangulo.png" alt="Gente Networking" className="h-24" />
           <Button onClick={scrollToForm} size="lg" className="bg-[#FFA500] hover:bg-[#FF8C00] text-white">
             Garantir Vaga
           </Button>
@@ -562,7 +562,7 @@ export default function GenteHub() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8">
         <div className="container mx-auto px-4 text-center">
-          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo-gente-networking-branco.png" alt="Gente Networking" className="h-16 mx-auto mb-4" />
+          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo-gente-networking-branco.png" alt="Gente Networking" className="h-24 mx-auto mb-4" />
           <p className="text-gray-400">© 2026 GeNtE - Grupo de Networking Empresarial. Todos os direitos reservados.</p>
         </div>
       </footer>
