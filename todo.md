@@ -334,3 +334,9 @@
 - [x] Adicionar binding R2 com bucket_name real (gente-networking-assets)
 - [ ] Fazer commit e deploy
 - [ ] Validar funcionamento
+
+## Correção de Erro 404 em Rotas SPA
+- [x] Criar _routes.json para Cloudflare Pages
+- [x] Verificar _redirects (já existia e está correto)
+- [ ] Fazer commit e deploy
+- [ ] Validar rotas /admin, /participe, /gentehub
