@@ -189,4 +189,10 @@
 - [x] Documentar opções de proxy/redirect
 - [x] Criar instruções para Cloudflare Workers (roteamento)
 - [x] Documentar configuração de DNS
-- [ ] Enviar documentação para o GitHub
+- [x] Enviar documentação para o GitHub
+
+## Correção de Build no Cloudflare Pages
+- [x] Corrigir configuração do Vite para output correto
+- [x] Testar build localmente
+- [ ] Enviar correção para o GitHub
+- [ ] Testar build no Cloudflare Pages
