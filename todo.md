@@ -309,3 +309,16 @@
 - [x] Adicionar tratamento de erros robusto
 - [ ] Testar fluxo completo de primeiro login
 - [ ] Salvar checkpoint
+
+## MIGRAÇÃO DEFINITIVA - Backend para Cloudflare Workers Functions
+- [x] Criar diretório /functions para Cloudflare Workers
+- [x] Migrar rotas tRPC para Cloudflare Workers Functions
+- [x] Configurar wrangler.toml com bindings D1 e R2
+- [x] Adaptar código de autenticação Cloudflare Access para Workers
+- [x] Criar db-d1.ts com funções SQL diretas (sem Drizzle)
+- [x] Criar context-workers.ts para Cloudflare Workers
+- [x] Criar routers-workers.ts adaptado para D1
+- [x] Criar documentação completa (CLOUDFLARE-WORKERS-MIGRATION.md)
+- [x] Criar guia pós-deploy (SETUP-POS-DEPLOY.md)
+- [ ] Configurar bindings D1 e R2 no dashboard Cloudflare Pages
+- [ ] Fazer deploy e validar funcionamento 100% no Cloudflare
