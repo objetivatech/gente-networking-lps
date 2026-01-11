@@ -328,3 +328,9 @@
 - [x] Tornar variáveis VITE_ANALYTICS_* opcionais no código
 - [x] Atualizar documentação sobre Umami analytics (UMAMI-ANALYTICS-SETUP.md)
 - [ ] Fazer commit e validar deploy
+
+## Configuração de Bindings no wrangler.toml
+- [x] Adicionar binding D1 com database_id real (cef239b3-f4e8-4e03-acf1-48aef86c2829)
+- [x] Adicionar binding R2 com bucket_name real (gente-networking-assets)
+- [ ] Fazer commit e deploy
+- [ ] Validar funcionamento
