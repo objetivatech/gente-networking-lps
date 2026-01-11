@@ -89,6 +89,7 @@ export async function authenticateRequest(req: Request): Promise<User> {
   const payload = await verifyCloudflareAccessToken(req);
 
   if (!payload || !payload.email) {
+    console.error("[CloudflareAccess] Authentication failed: Invalid or missing token");
     throw ForbiddenError("Invalid or missing Cloudflare Access token");
   }
 
@@ -98,31 +99,50 @@ export async function authenticateRequest(req: Request): Promise<User> {
   const userEmail = payload.email;
   const userName = payload.name || payload.email.split("@")[0];
 
+  console.log(`[CloudflareAccess] Authenticating user: ${userEmail}`);
+
   // Check if user exists by email
   let user = await db.getUserByEmail(userEmail);
 
   if (!user) {
+    console.log(`[CloudflareAccess] User not found, creating new user: ${userEmail}`);
     // Create new user with Cloudflare Access info
+    // Set role to 'admin' for all users authenticated via Cloudflare Access
     const openId = payload.sub || `cf-access-${userEmail}`;
-    await db.upsertUser({
-      openId,
-      name: userName,
-      email: userEmail,
-      loginMethod: "cloudflare-access",
-      lastSignedIn: signedInAt,
-    });
-    user = await db.getUserByEmail(userEmail);
+    try {
+      await db.upsertUser({
+        openId,
+        name: userName,
+        email: userEmail,
+        loginMethod: "cloudflare-access",
+        role: "admin", // All Cloudflare Access users are admins
+        lastSignedIn: signedInAt,
+      });
+      console.log(`[CloudflareAccess] User created successfully: ${userEmail}`);
+      user = await db.getUserByEmail(userEmail);
+    } catch (error) {
+      console.error(`[CloudflareAccess] Failed to create user ${userEmail}:`, error);
+      throw ForbiddenError("Failed to create user account");
+    }
   } else {
+    console.log(`[CloudflareAccess] User found, updating last sign in: ${userEmail}`);
     // Update last signed in time
-    await db.upsertUser({
-      openId: user.openId,
-      lastSignedIn: signedInAt,
-    });
+    try {
+      await db.upsertUser({
+        openId: user.openId,
+        lastSignedIn: signedInAt,
+      });
+    } catch (error) {
+      console.error(`[CloudflareAccess] Failed to update user ${userEmail}:`, error);
+      // Continue anyway - user exists
+    }
   }
 
   if (!user) {
+    console.error(`[CloudflareAccess] Failed to retrieve user after creation: ${userEmail}`);
     throw ForbiddenError("Failed to create or retrieve user");
   }
 
+  console.log(`[CloudflareAccess] Authentication successful: ${userEmail} (role: ${user.role})`);
   return user;
 }
