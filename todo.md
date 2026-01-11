@@ -259,6 +259,6 @@
 - [x] Verificar se o erro está no código client-side ou server-side (CLIENT-SIDE)
 - [x] Identificar causa raiz: tRPC usando URL relativa "/api/trpc" que falha no Cloudflare Pages
 - [x] Implementar solução definitiva (usar window.location.origin + /api/trpc)
-- [ ] Testar localmente
-- [ ] Testar no Cloudflare Pages
+- [x] Testar localmente (dashboard /admin carrega perfeitamente)
+- [ ] Testar no Cloudflare Pages (aguardando deploy do usuário)
 - [ ] Salvar checkpoint final
