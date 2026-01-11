@@ -289,5 +289,6 @@
 - [x] Criar guia de configuração do Cloudflare Access (CLOUDFLARE-ACCESS-SETUP.md)
 - [x] Revisar variáveis necessárias (apenas 2: CF_ACCESS_TEAM_DOMAIN e CF_ACCESS_AUD)
 - [x] Adicionar instruções claras de como obter cada variável
-- [ ] Testar autenticação localmente
+- [x] Testar autenticação localmente (funciona - aguarda config em produção)
+- [ ] Usuário deve seguir CLOUDFLARE-ACCESS-SETUP.md
 - [ ] Testar autenticação no Cloudflare Pages
