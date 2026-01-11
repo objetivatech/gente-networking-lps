@@ -37,10 +37,20 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
+// Build absolute URL for tRPC to avoid "Invalid URL" errors in Cloudflare Pages
+const getTrpcUrl = () => {
+  if (typeof window !== "undefined") {
+    // In browser: use current origin + /api/trpc
+    return `${window.location.origin}/api/trpc`;
+  }
+  // Fallback for SSR (shouldn't happen in this SPA, but safe)
+  return "/api/trpc";
+};
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: "/api/trpc",
+      url: getTrpcUrl(),
       transformer: superjson,
       fetch(input, init) {
         return globalThis.fetch(input, {

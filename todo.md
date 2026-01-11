@@ -250,5 +250,15 @@
   - [x] map.ts: Adicionar validação em makeRequest
   - [x] dataApi.ts e imageGeneration.ts já tinham validações adequadas
 - [x] Testar solução localmente (servidor reiniciado com sucesso)
-- [ ] Fazer deploy e testar no Cloudflare Pages
-- [ ] Salvar checkpoint com correção
+- [x] Fazer deploy e testar no Cloudflare Pages (aguardando teste do usuário)
+- [x] Salvar checkpoint com correção (checkpoint 8d7a50fe)
+
+## Investigação Erro Persistente - Invalid URL no Cloudflare Pages
+- [x] Analisar stack trace completo do erro no screenshot
+- [x] Identificar qual arquivo específico está causando o erro (index-o8YcojqZ.js - client-side)
+- [x] Verificar se o erro está no código client-side ou server-side (CLIENT-SIDE)
+- [x] Identificar causa raiz: tRPC usando URL relativa "/api/trpc" que falha no Cloudflare Pages
+- [x] Implementar solução definitiva (usar window.location.origin + /api/trpc)
+- [ ] Testar localmente
+- [ ] Testar no Cloudflare Pages
+- [ ] Salvar checkpoint final
