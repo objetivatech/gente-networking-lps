@@ -274,3 +274,20 @@
 - [x] Testar localmente (servidor funciona normalmente)
 - [ ] Usuário deve configurar variáveis de ambiente no Cloudflare Pages
 - [ ] Validar em produção após configurar variáveis
+
+
+## Revisão de Autenticação - Remover Dependências do Manus
+- [ ] Analisar código de autenticação atual (server/_core/auth.ts, server/_core/oauth.ts)
+- [ ] Identificar todas as dependências do Manus OAuth
+- [x] Propor alternativas de autenticação usando apenas Cloudflare:
+  - [x] Opção 1: Cloudflare Access (autenticação gerenciada)
+  - [ ] Opção 2: Autenticação simples com senha (login/senha no D1)
+  - [ ] Opção 3: Magic Link via email
+- [x] ESCOLHIDO: Cloudflare Access (Opção 3)
+- [x] Remover todo código OAuth do Manus
+- [x] Implementar autenticação via Cloudflare Access headers (cloudflare-access-auth.ts)
+- [x] Criar guia de configuração do Cloudflare Access (CLOUDFLARE-ACCESS-SETUP.md)
+- [x] Revisar variáveis necessárias (apenas 2: CF_ACCESS_TEAM_DOMAIN e CF_ACCESS_AUD)
+- [x] Adicionar instruções claras de como obter cada variável
+- [ ] Testar autenticação localmente
+- [ ] Testar autenticação no Cloudflare Pages
