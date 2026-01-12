@@ -428,3 +428,23 @@
 - [x] Adicionar logs detalhados para debug em callback e context
 - [ ] Fazer deploy e testar
 - [ ] Verificar logs no Cloudflare Pages para confirmar funcionamento
+
+
+## PROBLEMA CRÍTICO - Cloudflare Access Conflitando com Google OAuth
+**DATA**: 12/01/2026
+**SINTOMA**: 
+- Navegador normal: Passa pelo CA → tenta Google OAuth → volta para tela de login
+- Aba anônima: Bloqueado pelo Cloudflare Access antes de chegar no Google OAuth
+- Comportamento diferente dependendo se tem cookie do CA ou não
+
+**CAUSA**:
+✅ Variável `CF_ACCESS_TEAM_DOMAIN` está no wrangler.toml
+✅ Não pode ser removida pelo dashboard (mensagem: "gerenciadas por meio do wrangler.toml")
+✅ Cloudflare Access está interceptando requisições antes do Google OAuth
+
+**SOLUÇÃO**:
+- [x] Remover CF_ACCESS_TEAM_DOMAIN do wrangler.toml
+- [x] Remover comentários sobre CF_ACCESS_AUD
+- [ ] Commit e push
+- [ ] Redeploy no Cloudflare Pages
+- [ ] Testar em aba anônima (sem cookies antigos)

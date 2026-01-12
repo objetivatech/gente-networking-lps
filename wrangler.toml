@@ -12,11 +12,3 @@ database_id = "cef239b3-f4e8-4e03-acf1-48aef86c2829"
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "gente-networking-assets"
-
-# Environment variables
-[vars]
-CF_ACCESS_TEAM_DOMAIN = "gentenetworking.cloudflareaccess.com"
-
-# IMPORTANTE: CF_ACCESS_AUD deve ser configurado como secret via dashboard:
-# Settings → Environment variables → Add variable → Encrypt
-# Valor: Application Audience UID do Cloudflare Access
