@@ -44,8 +44,8 @@ export async function createLead(
 ) {
   const result = await db
     .prepare(
-      `INSERT INTO leads (name, email, whatsapp, company, segment, source, status, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, 'new', ?) RETURNING *`
+      `INSERT INTO leads (name, email, whatsapp, company, segment, source, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'new') RETURNING *`
     )
     .bind(
       data.name,
@@ -53,8 +53,7 @@ export async function createLead(
       data.whatsapp,
       data.company,
       data.segment,
-      data.source,
-      Date.now()
+      data.source
     )
     .first();
   return result;
@@ -62,7 +61,7 @@ export async function createLead(
 
 export async function getAllLeads(db: D1Database) {
   const result = await db
-    .prepare('SELECT * FROM leads ORDER BY created_at DESC')
+    .prepare('SELECT * FROM leads ORDER BY id DESC')
     .all();
   return result.results || [];
 }
@@ -72,7 +71,7 @@ export async function getLeadsBySource(
   source: 'participe' | 'gentehub'
 ) {
   const result = await db
-    .prepare('SELECT * FROM leads WHERE source = ? ORDER BY created_at DESC')
+    .prepare('SELECT * FROM leads WHERE source = ? ORDER BY id DESC')
     .bind(source)
     .all();
   return result.results || [];

@@ -340,3 +340,13 @@
 - [x] Verificar _redirects (já existia e está correto)
 - [ ] Fazer commit e deploy
 - [ ] Validar rotas /admin, /participe, /gentehub
+
+
+## PROBLEMAS CRÍTICOS - CORREÇÃO URGENTE
+- [x] Erro formulário: "D1_ERROR: table leads has no column named created_at: SQLITE_ERROR"
+- [x] Erro autenticação: "Current authentication token is expired" no Cloudflare Access
+- [x] Analisar schema D1 e SQL de inserção de leads
+- [x] Remover created_at do SQL de inserção de leads (coluna não existe no D1)
+- [x] Adicionar botão "Limpar Sessão" para forçar novo login
+- [ ] Testar formulários /participe e /gentehub
+- [ ] Testar login no /admin com botão "Limpar Sessão"

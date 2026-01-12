@@ -51,12 +51,27 @@ export default function Admin() {
             <p className="text-gray-600 mb-6">
               Você precisa estar autenticado para acessar o dashboard administrativo.
             </p>
-            <Button 
-              onClick={() => window.location.href = getLoginUrl()} 
-              className="bg-[#1E5A96] hover:bg-[#1E5A96]/90"
-            >
-              Fazer Login
-            </Button>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => window.location.href = getLoginUrl()} 
+                className="w-full bg-[#1E5A96] hover:bg-[#1E5A96]/90"
+              >
+                Fazer Login
+              </Button>
+              <Button 
+                onClick={() => {
+                  // Limpar cookies e cache do Cloudflare Access
+                  document.cookie.split(";").forEach((c) => {
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                  });
+                  window.location.href = getLoginUrl();
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                Limpar Sessão e Fazer Login
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
