@@ -51,8 +51,11 @@ export default function Admin() {
             <p className="text-gray-600 mb-6">
               Você precisa estar autenticado para acessar o dashboard administrativo.
             </p>
-            <Button asChild className="bg-[#1E5A96] hover:bg-[#1E5A96]/90">
-              <a href={getLoginUrl()}>Fazer Login</a>
+            <Button 
+              onClick={() => window.location.href = getLoginUrl()} 
+              className="bg-[#1E5A96] hover:bg-[#1E5A96]/90"
+            >
+              Fazer Login
             </Button>
           </CardContent>
         </Card>

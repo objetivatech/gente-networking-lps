@@ -2,11 +2,10 @@ export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 
 /**
  * Cloudflare Access handles authentication at the edge.
- * Users are automatically redirected to Cloudflare Access login when accessing protected routes.
- * No manual login URL needed - just navigate to the protected route.
+ * Users must do a full page reload to trigger Cloudflare Access authentication.
+ * SPA navigation (React Router) bypasses Cloudflare Access, so we need window.location.
  */
 export const getLoginUrl = (redirectPath: string = "/admin") => {
-  // Cloudflare Access automatically handles authentication
-  // Just return the protected route, Cloudflare will intercept if not authenticated
-  return redirectPath;
+  // Return full URL to force browser reload and trigger Cloudflare Access
+  return window.location.origin + redirectPath;
 };
