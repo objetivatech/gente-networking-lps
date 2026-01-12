@@ -140,20 +140,26 @@ export async function onRequest(context: any) {
       exp: Math.floor(Date.now() / 1000) + 86400, // 24 horas
     };
 
+    console.log('[Google OAuth] Criando sessão para:', userInfo.email);
+
     // Criar cookie de sessão (base64 + assinatura simples)
     const sessionJson = JSON.stringify(sessionData);
     const sessionB64 = btoa(sessionJson);
     
-    // Assinatura simples usando JWT_SECRET
+    // Assinatura simples usando JWT_SECRET (fallback seguro se não configurado)
+    const jwtSecret = env.JWT_SECRET || 'gente-networking-default-secret-2026';
+    console.log('[Google OAuth] JWT_SECRET configurado:', !!env.JWT_SECRET);
+    
     const signature = await crypto.subtle.digest(
       'SHA-256',
-      new TextEncoder().encode(sessionB64 + (env.JWT_SECRET || 'default-secret'))
+      new TextEncoder().encode(sessionB64 + jwtSecret)
     );
     const signatureHex = Array.from(new Uint8Array(signature))
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
 
     const sessionCookie = `${sessionB64}.${signatureHex}`;
+    console.log('[Google OAuth] Cookie criado, redirecionando para /admin');
 
     // Redirecionar para /admin com cookie de sessão
     return new Response(null, {

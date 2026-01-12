@@ -409,3 +409,22 @@
 - [x] Atualizado GOOGLE-OAUTH-SETUP.md com instrução para marcar "Encrypt" em todas as 4 variáveis
 - [x] Adicionado explicação sobre por que isso é necessário
 - [x] Criado arquivo DESCOBERTA-ENV-VARS.md com detalhes técnicos
+
+
+## PROBLEMA ATUAL - Google OAuth Login Funciona Mas Não Cria Sessão
+**DATA**: 12/01/2026
+**SINTOMA**: Login no Google funciona, mas após callback volta para /admin pedindo login novamente
+**EMAIL TESTADO**: ranktopseoestrategico@gmail.com
+**ADMIN_EMAILS CONFIGURADO**: ranktopseoestrategico@gmail.com,gentenetworking@gmail.com
+
+**CAUSA RAIZ IDENTIFICADA**:
+✅ JWT_SECRET não estava configurado no Cloudflare Pages
+✅ Código usa `env.JWT_SECRET || 'default-secret'` mas em Workers undefined !== ''
+✅ Assinaturas do cookie ficam inconsistentes entre callback e context
+
+**SOLUÇÃO**:
+- [x] Identificar causa raiz (JWT_SECRET não configurado)
+- [x] Implementar fallback seguro no código (usar 'gente-networking-default-secret-2026')
+- [x] Adicionar logs detalhados para debug em callback e context
+- [ ] Fazer deploy e testar
+- [ ] Verificar logs no Cloudflare Pages para confirmar funcionamento

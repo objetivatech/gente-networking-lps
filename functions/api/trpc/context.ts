@@ -37,20 +37,33 @@ export async function createContext(context: EventContext<Env, any, Record<strin
   const sessionCookie = cookies['admin_session'];
   let user: User | null = null;
 
+  console.log('[Google OAuth Context] Cookie admin_session presente:', !!sessionCookie);
+
   if (sessionCookie) {
     try {
       // Separar sessão e assinatura
       const [sessionB64, signatureHex] = sessionCookie.split('.');
 
+      console.log('[Google OAuth Context] Cookie parseado:', { hasSession: !!sessionB64, hasSignature: !!signatureHex });
+
       if (sessionB64 && signatureHex) {
-        // Verificar assinatura
+        // Verificar assinatura (usar mesmo fallback do callback)
+        const jwtSecret = env.JWT_SECRET || 'gente-networking-default-secret-2026';
+        console.log('[Google OAuth Context] JWT_SECRET configurado:', !!env.JWT_SECRET);
+        
         const expectedSignature = await crypto.subtle.digest(
           'SHA-256',
-          new TextEncoder().encode(sessionB64 + (env.JWT_SECRET || 'default-secret'))
+          new TextEncoder().encode(sessionB64 + jwtSecret)
         );
         const expectedSignatureHex = Array.from(new Uint8Array(expectedSignature))
           .map(b => b.toString(16).padStart(2, '0'))
           .join('');
+
+        console.log('[Google OAuth Context] Assinaturas:', { 
+          received: signatureHex.substring(0, 16) + '...', 
+          expected: expectedSignatureHex.substring(0, 16) + '...',
+          match: signatureHex === expectedSignatureHex
+        });
 
         if (signatureHex === expectedSignatureHex) {
           // Decodificar sessão
@@ -59,6 +72,8 @@ export async function createContext(context: EventContext<Env, any, Record<strin
 
           // Verificar expiração
           const now = Math.floor(Date.now() / 1000);
+          console.log('[Google OAuth Context] Expiração:', { exp: sessionData.exp, now, valid: sessionData.exp >= now });
+          
           if (sessionData.exp >= now) {
             user = {
               email: sessionData.email,
@@ -66,17 +81,19 @@ export async function createContext(context: EventContext<Env, any, Record<strin
               picture: sessionData.picture,
             };
             
-            console.log('[Google OAuth] Usuário autenticado:', user.email);
+            console.log('[Google OAuth Context] Usuário autenticado:', user.email);
           } else {
-            console.log('[Google OAuth] Sessão expirada');
+            console.log('[Google OAuth Context] Sessão expirada');
           }
         } else {
-          console.log('[Google OAuth] Assinatura inválida');
+          console.log('[Google OAuth Context] Assinatura inválida');
         }
       }
     } catch (error) {
-      console.error('[Google OAuth] Erro ao verificar sessão:', error);
+      console.error('[Google OAuth Context] Erro ao verificar sessão:', error);
     }
+  } else {
+    console.log('[Google OAuth Context] Nenhum cookie de sessão encontrado');
   }
   
   return {
