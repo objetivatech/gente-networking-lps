@@ -1,75 +1,81 @@
 /**
- * Context do tRPC para Cloudflare Workers
- * 
- * Cria o contexto para cada requisição tRPC, incluindo:
- * - Autenticação via Cloudflare Access JWT
- * - Acesso ao D1 Database
- * - Acesso ao R2 Bucket
+ * tRPC Context para Cloudflare Workers
+ * Verifica sessão via cookie admin_session (Google OAuth independente)
  */
-
-import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 interface Env {
   DB: D1Database;
   BUCKET: R2Bucket;
-  CF_ACCESS_TEAM_DOMAIN: string;
-  CF_ACCESS_AUD: string;
+  JWT_SECRET: string;
+}
+
+interface SessionData {
+  email: string;
+  name: string;
+  picture: string;
+  exp: number;
 }
 
 interface User {
-  id: number;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  picture: string;
 }
 
 export async function createContext(context: EventContext<Env, any, Record<string, unknown>>) {
   const { request, env } = context;
   
-  // Extrair JWT do Cloudflare Access
-  // Tentar primeiro do header, depois do cookie
-  let cfAccessJwt = request.headers.get('Cf-Access-Jwt-Assertion');
-  
-  if (!cfAccessJwt) {
-    // Extrair do cookie CF_Authorization
-    const cookieHeader = request.headers.get('Cookie');
-    if (cookieHeader) {
-      const cookies = cookieHeader.split(';').map(c => c.trim());
-      const cfAuthCookie = cookies.find(c => c.startsWith('CF_Authorization='));
-      if (cfAuthCookie) {
-        cfAccessJwt = cfAuthCookie.split('=')[1];
-      }
-    }
-  }
-  
+  // Extrair cookie admin_session
+  const cookieHeader = request.headers.get('Cookie') || '';
+  const cookies = Object.fromEntries(
+    cookieHeader.split(';').map(c => {
+      const [key, ...v] = c.trim().split('=');
+      return [key, v.join('=')];
+    })
+  );
+
+  const sessionCookie = cookies['admin_session'];
   let user: User | null = null;
-  
-  if (cfAccessJwt && env.CF_ACCESS_TEAM_DOMAIN && env.CF_ACCESS_AUD) {
+
+  if (sessionCookie) {
     try {
-      // Verificar JWT usando JWKS do Cloudflare
-      const jwksUrl = `https://${env.CF_ACCESS_TEAM_DOMAIN}/cdn-cgi/access/certs`;
-      const JWKS = createRemoteJWKSet(new URL(jwksUrl));
-      
-      const { payload } = await jwtVerify(cfAccessJwt, JWKS, {
-        audience: env.CF_ACCESS_AUD,
-        issuer: `https://${env.CF_ACCESS_TEAM_DOMAIN}`,
-      });
-      
-      const email = payload.email as string;
-      const name = payload.name as string || email.split('@')[0];
-      
-      if (email) {
-        // Buscar ou criar usuário no banco D1
-        user = await getOrCreateUser(env.DB, email, name);
-        
-        console.log('[Cloudflare Access] Usuário autenticado:', {
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        });
+      // Separar sessão e assinatura
+      const [sessionB64, signatureHex] = sessionCookie.split('.');
+
+      if (sessionB64 && signatureHex) {
+        // Verificar assinatura
+        const expectedSignature = await crypto.subtle.digest(
+          'SHA-256',
+          new TextEncoder().encode(sessionB64 + (env.JWT_SECRET || 'default-secret'))
+        );
+        const expectedSignatureHex = Array.from(new Uint8Array(expectedSignature))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+
+        if (signatureHex === expectedSignatureHex) {
+          // Decodificar sessão
+          const sessionJson = atob(sessionB64);
+          const sessionData: SessionData = JSON.parse(sessionJson);
+
+          // Verificar expiração
+          const now = Math.floor(Date.now() / 1000);
+          if (sessionData.exp >= now) {
+            user = {
+              email: sessionData.email,
+              name: sessionData.name,
+              picture: sessionData.picture,
+            };
+            
+            console.log('[Google OAuth] Usuário autenticado:', user.email);
+          } else {
+            console.log('[Google OAuth] Sessão expirada');
+          }
+        } else {
+          console.log('[Google OAuth] Assinatura inválida');
+        }
       }
     } catch (error) {
-      console.error('[Cloudflare Access] Erro ao verificar JWT:', error);
+      console.error('[Google OAuth] Erro ao verificar sessão:', error);
     }
   }
   
@@ -78,37 +84,6 @@ export async function createContext(context: EventContext<Env, any, Record<strin
     db: env.DB,
     bucket: env.BUCKET,
   };
-}
-
-async function getOrCreateUser(db: D1Database, email: string, name: string): Promise<User> {
-  // Buscar usuário existente
-  const existingUser = await db
-    .prepare('SELECT * FROM users WHERE email = ?')
-    .bind(email)
-    .first<User>();
-  
-  if (existingUser) {
-    return existingUser;
-  }
-  
-  // Criar novo usuário admin automaticamente
-  const result = await db
-    .prepare(
-      'INSERT INTO users (email, name, role, created_at) VALUES (?, ?, ?, ?) RETURNING *'
-    )
-    .bind(email, name, 'admin', Date.now())
-    .first<User>();
-  
-  if (!result) {
-    throw new Error('Falha ao criar usuário');
-  }
-  
-  console.log('[Auto-provisioning] Novo usuário admin criado:', {
-    email: result.email,
-    name: result.name,
-  });
-  
-  return result;
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

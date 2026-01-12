@@ -378,3 +378,17 @@
 
 - [x] Modificar context.ts para extrair JWT do cookie
 - [ ] Testar autenticação completa
+
+
+## IMPLEMENTAÇÃO NOVA - Autenticação Google OAuth Independente
+**DECISÃO**: Remover Cloudflare Access e Manus Auth completamente
+**SOLUÇÃO**: Google OAuth direto + lista de emails autorizados via variável ADMIN_EMAILS
+
+- [x] Criar endpoint /api/auth/google/login (inicia OAuth flow)
+- [x] Criar endpoint /api/auth/google/callback (processa callback e cria sessão)
+- [x] Atualizar context.ts para verificar sessão via cookie simples
+- [x] Atualizar Admin.tsx para botão "Entrar com Google"
+- [x] Criar documentação completa GOOGLE-OAUTH-SETUP.md
+- [ ] Usuário deve seguir GOOGLE-OAUTH-SETUP.md para configurar Google Cloud Console
+- [ ] Usuário deve adicionar variáveis no Cloudflare Pages (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI, ADMIN_EMAILS)
+- [ ] Testar fluxo completo de login

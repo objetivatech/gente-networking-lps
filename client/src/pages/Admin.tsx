@@ -52,10 +52,10 @@ export default function Admin() {
               Você precisa estar autenticado para acessar o dashboard administrativo.
             </p>
             <Button 
-              onClick={() => window.location.href = '/api/auth/login'} 
+              onClick={() => window.location.href = '/api/auth/google/login'} 
               className="bg-[#1E5A96] hover:bg-[#1E5A96]/90"
             >
-              Fazer Login
+              Entrar com Google
             </Button>
           </CardContent>
         </Card>

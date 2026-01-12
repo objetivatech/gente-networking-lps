@@ -45,7 +45,7 @@ export default function Participe() {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo_gente_retangulo.png" alt="Gente Networking" className="h-24" />
+          <img src="https://pub-9fc7caa2a9e54e9cb220bd10c8da8f2f.r2.dev/images/logo_gente_retangulo.png" alt="Gente Networking" className="h-18" />
           <Button onClick={scrollToForm} size="lg" className="bg-[#FFA500] hover:bg-[#FF8C00] text-white">
             Quero Participar!
           </Button>
