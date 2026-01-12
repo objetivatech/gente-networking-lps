@@ -392,3 +392,20 @@
 - [ ] Usuário deve seguir GOOGLE-OAUTH-SETUP.md para configurar Google Cloud Console
 - [ ] Usuário deve adicionar variáveis no Cloudflare Pages (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI, ADMIN_EMAILS)
 - [ ] Testar fluxo completo de login
+
+
+## DESCOBERTA - Variáveis de Ambiente no Cloudflare Pages com wrangler.toml
+**DATA**: 12/01/2026
+**PROBLEMA**: Usuário não conseguia adicionar variáveis via dashboard (mensagem: "variáveis gerenciadas via wrangler.toml")
+**SOLUÇÃO ENCONTRADA**: Marcar "Encrypt" em TODAS as variáveis para transformá-las em secrets
+
+**Como funciona:**
+- Quando usa `wrangler.toml`, Cloudflare Pages só permite adicionar **secrets** via dashboard
+- Variáveis normais precisariam ser adicionadas no arquivo `wrangler.toml` (não seguro para credenciais)
+- Marcar "Encrypt" transforma qualquer variável em secret, permitindo gerenciá-la via dashboard
+- Isso é até mais seguro do que adicionar no `wrangler.toml`
+
+**Ações tomadas:**
+- [x] Atualizado GOOGLE-OAUTH-SETUP.md com instrução para marcar "Encrypt" em todas as 4 variáveis
+- [x] Adicionado explicação sobre por que isso é necessário
+- [x] Criado arquivo DESCOBERTA-ENV-VARS.md com detalhes técnicos

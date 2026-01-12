@@ -62,34 +62,40 @@ Este guia mostra como configurar autenticação Google OAuth **100% independente
 
 ## Passo 4: Configurar Variáveis de Ambiente no Cloudflare Pages
 
+**⚠️ IMPORTANTE**: Como o projeto usa `wrangler.toml`, você precisa marcar **"Encrypt"** em TODAS as variáveis para conseguir adicioná-las via dashboard.
+
 1. Acesse: **Workers & Pages** → **gente-networking-lps** → **Settings** → **Environment variables**
 2. Clique em **Add variable** e adicione as seguintes variáveis:
 
 ### Variável 1: GOOGLE_CLIENT_ID
 - **Variable name**: `GOOGLE_CLIENT_ID`
 - **Value**: Cole o **Client ID** copiado no Passo 3
-- **Type**: Deixe desmarcado (não é secret)
+- **Type**: ✅ **Marque "Encrypt"** (obrigatório para adicionar via dashboard)
 - **Environment**: Marque **Production** e **Preview**
 
 ### Variável 2: GOOGLE_CLIENT_SECRET
 - **Variable name**: `GOOGLE_CLIENT_SECRET`
 - **Value**: Cole o **Client Secret** copiado no Passo 3
-- **Type**: Marque **Encrypt** (é secret)
+- **Type**: ✅ **Marque "Encrypt"** (obrigatório para adicionar via dashboard)
 - **Environment**: Marque **Production** e **Preview**
 
 ### Variável 3: GOOGLE_REDIRECT_URI
 - **Variable name**: `GOOGLE_REDIRECT_URI`
 - **Value**: `https://lps.gentenetworking.com.br/api/auth/google/callback`
-- **Type**: Deixe desmarcado
+- **Type**: ✅ **Marque "Encrypt"** (obrigatório para adicionar via dashboard)
 - **Environment**: Marque **Production** e **Preview**
 
 ### Variável 4: ADMIN_EMAILS
 - **Variable name**: `ADMIN_EMAILS`
 - **Value**: Lista de emails autorizados separados por vírgula (ex: `gentenetworking@gmail.com,ranktopseo@gmail.com,sou@especialistaseo.com.br`)
-- **Type**: Deixe desmarcado
+- **Type**: ✅ **Marque "Encrypt"** (obrigatório para adicionar via dashboard)
 - **Environment**: Marque **Production** e **Preview**
 
 3. Clique em **Save**
+
+**💡 Por que marcar "Encrypt" em todas?**
+
+Quando você usa `wrangler.toml`, o Cloudflare Pages só permite adicionar **secrets** (variáveis criptografadas) via dashboard. Variáveis normais precisariam ser adicionadas diretamente no arquivo `wrangler.toml` e commitadas no Git (o que não é seguro para credenciais). Marcar "Encrypt" transforma todas em secrets, permitindo gerenciá-las de forma segura via dashboard.
 
 ---
 
