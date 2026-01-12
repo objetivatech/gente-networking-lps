@@ -27,7 +27,20 @@ export async function createContext(context: EventContext<Env, any, Record<strin
   const { request, env } = context;
   
   // Extrair JWT do Cloudflare Access
-  const cfAccessJwt = request.headers.get('Cf-Access-Jwt-Assertion');
+  // Tentar primeiro do header, depois do cookie
+  let cfAccessJwt = request.headers.get('Cf-Access-Jwt-Assertion');
+  
+  if (!cfAccessJwt) {
+    // Extrair do cookie CF_Authorization
+    const cookieHeader = request.headers.get('Cookie');
+    if (cookieHeader) {
+      const cookies = cookieHeader.split(';').map(c => c.trim());
+      const cfAuthCookie = cookies.find(c => c.startsWith('CF_Authorization='));
+      if (cfAuthCookie) {
+        cfAccessJwt = cfAuthCookie.split('=')[1];
+      }
+    }
+  }
   
   let user: User | null = null;
   

@@ -360,3 +360,21 @@
 - [x] Atualizar Admin.tsx para redirecionar para `/api/auth/login` ao clicar em "Fazer Login"
 - [ ] Usuário deve mudar Cloudflare Access: trocar caminho de `/admin` para `/api/*`
 - [ ] Testar fluxo completo de autenticação
+
+
+## PROBLEMA - Frontend não reconhece autenticação após login Cloudflare Access
+**SINTOMA**: Usuário faz login no Cloudflare Access com sucesso, mas volta para tela "Acesso Restrito"
+**CAUSA**: useAuth() retorna null porque não está verificando JWT do Cloudflare Access corretamente
+
+- [ ] Analisar useAuth() e fluxo de verificação no Admin.tsx
+- [ ] Verificar se tRPC auth.me está sendo chamado
+- [ ] Corrigir lógica de autenticação no frontend
+- [ ] Testar login completo
+
+
+## CORREÇÃO FINAL - JWT do Cloudflare Access
+**PROBLEMA**: Header `Cf-Access-Jwt-Assertion` não está chegando no Worker
+**SOLUÇÃO**: Ler JWT do cookie `CF_Authorization` que está presente nas requisições
+
+- [x] Modificar context.ts para extrair JWT do cookie
+- [ ] Testar autenticação completa
