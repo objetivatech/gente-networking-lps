@@ -350,3 +350,13 @@
 - [x] Adicionar botão "Limpar Sessão" para forçar novo login
 - [ ] Testar formulários /participe e /gentehub
 - [ ] Testar login no /admin com botão "Limpar Sessão"
+
+
+## CORREÇÃO DEFINITIVA - Autenticação Cloudflare Access
+**PROBLEMA RAIZ**: Cloudflare Access protege `/admin` mas React Router intercepta navegação SPA antes do Access
+**SOLUÇÃO**: Proteger `/api/*` no Cloudflare Access e criar endpoint `/api/auth/login` que força autenticação
+
+- [x] Criar endpoint `/api/auth/login` que redireciona para /admin após autenticação
+- [x] Atualizar Admin.tsx para redirecionar para `/api/auth/login` ao clicar em "Fazer Login"
+- [ ] Usuário deve mudar Cloudflare Access: trocar caminho de `/admin` para `/api/*`
+- [ ] Testar fluxo completo de autenticação
