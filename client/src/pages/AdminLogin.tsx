@@ -5,12 +5,14 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [, setLocation] = useLocation();
+  const utils = trpc.useUtils();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +28,10 @@ export default function AdminLogin() {
 
       if (response.ok) {
         toast.success("Login realizado com sucesso!");
+        // Invalidar cache do tRPC para forçar revalidação de auth.me
+        await utils.auth.me.invalidate();
+        // Aguardar um pouco para garantir que o cookie foi processado
+        await new Promise(resolve => setTimeout(resolve, 500));
         setLocation("/admin");
       } else {
         const error = await response.json();

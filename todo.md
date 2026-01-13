@@ -614,3 +614,18 @@ OU está usando método antigo do Manus Auth
 - [ ] Mostrar assinaturas geradas vs esperadas
 - [ ] Mostrar se context.ts consegue ler o cookie
 - [ ] Identificar EXATAMENTE onde está falhando
+
+
+## DESCOBERTA - Backend 100% funcional, problema no frontend
+**DATA**: 13/01/2026
+**TESTE**: /api/debug/test-auth retornou sucesso completo
+**RESULTADO**: ✅ Assinatura HMAC-SHA256 funciona, validação funciona, variáveis configuradas
+**CAUSA RAIZ**: Admin.tsx usa useAuth() que chama trpc.auth.me em cache, não revalida após login
+**SOLUÇÃO**: Invalidar cache do tRPC após login bem-sucedido
+
+- [x] Analisar código do AdminLogin.tsx
+- [x] Analisar código do Admin.tsx
+- [x] Identificar problema: tRPC cache não invalida após login
+- [x] Adicionar utils.auth.me.invalidate() após login
+- [x] Adicionar delay de 500ms para garantir processamento do cookie
+- [ ] Deploy e validar
