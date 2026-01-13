@@ -552,3 +552,23 @@ OU está usando método antigo do Manus Auth
 - [x] Identificar problema: client/src/lib/trpc.ts importava routers.ts em vez de routers-workers.ts
 - [x] Corrigir importação para usar routers-workers.ts
 - [ ] Testar após deploy
+
+
+## SOLUÇÃO FINAL - Substituir Google OAuth por Autenticação Simples
+**DATA**: 13/01/2026
+**DECISÃO**: Após 6+ tentativas com Google OAuth sem sucesso, implementar solução simples e direta
+
+**IMPLEMENTAÇÃO**:
+- [x] Criar página de login com formulário usuário/senha (AdminLogin.tsx)
+- [x] Criar endpoint POST /api/auth/simple-login que valida credenciais
+- [x] Validar contra variáveis de ambiente ADMIN_USERNAME e ADMIN_PASSWORD
+- [x] Manter sistema de cookie admin_session (já funciona)
+- [x] Atualizar Admin.tsx para redirecionar para /admin/login
+- [x] Adicionar rota /admin/login no App.tsx
+- [ ] Testar localmente
+- [ ] Deploy e validar
+
+**VARIÁVEIS NECESSÁRIAS**:
+- ADMIN_USERNAME (ex: admin)
+- ADMIN_PASSWORD (senha forte)
+- ADMIN_EMAILS (manter para referência)

@@ -41,26 +41,8 @@ export default function Admin() {
 
   // Not authenticated
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="max-w-md w-full">
-          <CardHeader>
-            <CardTitle className="text-center">Acesso Restrito</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center">
-            <p className="text-gray-600 mb-6">
-              Você precisa estar autenticado para acessar o dashboard administrativo.
-            </p>
-            <Button 
-              onClick={() => window.location.href = '/api/auth/google/login'} 
-              className="bg-[#1E5A96] hover:bg-[#1E5A96]/90"
-            >
-              Entrar com Google
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    window.location.href = "/admin/login";
+    return null;
   }
 
   // Not admin

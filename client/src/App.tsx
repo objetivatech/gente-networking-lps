@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Participe from "./pages/Participe";
 import GenteHub from "./pages/GenteHub";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/participe"} component={Participe} />
       <Route path={"/gentehub"} component={GenteHub} />
+      <Route path={"/admin/login"} component={AdminLogin} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
