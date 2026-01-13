@@ -597,3 +597,20 @@ OU está usando método antigo do Manus Auth
 - [x] Criar função verifyCookie() idêntica à signCookie()
 - [x] Atualizar context.ts para usar HMAC-SHA256
 - [ ] Deploy e validar
+
+
+## PROBLEMA CRÍTICO - Login ainda não funciona após correção HMAC
+**DATA**: 13/01/2026
+**SINTOMA**: Mensagem "Login realizado com sucesso" mas volta para form de login
+**TENTATIVAS**: Navegador normal e aba anônima - mesmo comportamento
+**CORREÇÕES JÁ FEITAS**: 
+- ✅ Substituído crypto do Node.js por Web Crypto API
+- ✅ Corrigido context.ts para usar HMAC-SHA256 (mesma do simple-login.ts)
+- ✅ Garantido JWT_SECRET idêntico em ambos
+
+**PRÓXIMA AÇÃO**: Criar endpoint de debug completo para testar fluxo inteiro
+
+- [ ] Criar /api/debug/test-auth que simula login e valida imediatamente
+- [ ] Mostrar assinaturas geradas vs esperadas
+- [ ] Mostrar se context.ts consegue ler o cookie
+- [ ] Identificar EXATAMENTE onde está falhando
