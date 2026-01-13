@@ -1,5 +1,4 @@
 import type { PagesFunction } from "@cloudflare/workers-types";
-import { createHmac } from "crypto";
 
 interface Env {
   ADMIN_USERNAME: string;
@@ -9,6 +8,28 @@ interface Env {
 }
 
 const SECRET_FALLBACK = "gente-networking-default-secret-2026";
+
+// Web Crypto API compatible signature function
+async function signCookie(data: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(data)
+  );
+  
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
@@ -42,13 +63,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     };
 
     const sessionJson = JSON.stringify(sessionData);
-    const sessionBase64 = Buffer.from(sessionJson).toString("base64");
+    const sessionBase64 = btoa(sessionJson); // Use btoa instead of Buffer
 
-    // Assinar sessão
+    // Assinar sessão usando Web Crypto API
     const secret = env.JWT_SECRET || SECRET_FALLBACK;
-    const signature = createHmac("sha256", secret)
-      .update(sessionBase64)
-      .digest("hex");
+    const signature = await signCookie(sessionBase64, secret);
 
     const signedSession = `${sessionBase64}.${signature}`;
 

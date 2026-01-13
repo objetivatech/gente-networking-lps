@@ -572,3 +572,15 @@ OU está usando método antigo do Manus Auth
 - ADMIN_USERNAME (ex: admin)
 - ADMIN_PASSWORD (senha forte)
 - ADMIN_EMAILS (manter para referência)
+
+
+## ERRO DE BUILD - Crypto não suportado no Cloudflare Workers
+**DATA**: 13/01/2026
+**ERRO**: Could not resolve "crypto" in simple-login.ts
+**CAUSA**: Cloudflare Workers não suporta módulo crypto do Node.js
+**SOLUÇÃO**: Substituir createHmac por Web Crypto API
+
+- [x] Reescrever simple-login.ts usando Web Crypto API
+- [x] Substituir Buffer.from por btoa (nativo do browser)
+- [x] Substituir createHmac por crypto.subtle (Web Crypto API)
+- [ ] Deploy e validar
