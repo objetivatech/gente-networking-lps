@@ -524,3 +524,31 @@ OU a lógica de validação está falhando
 - [ ] Analisar context.ts linha por linha
 - [ ] Verificar como está lendo cookies
 - [ ] Corrigir leitura para funcionar com Cloudflare Pages
+
+
+## DESCOBERTA CRÍTICA - Context.ts Funciona Mas Frontend Não Reconhece
+**DATA**: 13/01/2026
+**VALIDAÇÃO COMPLETA**:
+✅ Endpoint /api/debug/validate-session confirma: TODOS os 7 passos passam
+✅ Cookie admin_session válido e presente
+✅ Assinatura criptográfica correta
+✅ Sessão não expirada (20h restantes)
+✅ Email correto: ranktopseoestrategico@gmail.com
+✅ JWT_SECRET configurado e funcionando
+
+**PROBLEMA REAL**:
+❌ Página /admin NÃO reconhece usuário autenticado
+❌ Continua mostrando botão "Entrar com Google"
+❌ Backend valida sessão corretamente, mas frontend ignora
+
+**HIPÓTESE**:
+Admin.tsx deve estar verificando autenticação de forma diferente
+OU não está chamando o context.ts corretamente
+OU está usando método antigo do Manus Auth
+
+**AÇÃO**:
+- [x] Analisar código de Admin.tsx
+- [x] Verificar como está verificando autenticação (usa useAuth() que chama trpc.auth.me)
+- [x] Identificar problema: client/src/lib/trpc.ts importava routers.ts em vez de routers-workers.ts
+- [x] Corrigir importação para usar routers-workers.ts
+- [ ] Testar após deploy
