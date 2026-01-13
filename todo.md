@@ -472,3 +472,29 @@
 - [x] ENCONTRADO: functions/api/auth/login.ts estava forçando Cloudflare Access
 - [x] DELETADO: functions/api/auth/login.ts
 - [ ] Commit, push e testar
+
+
+## PROBLEMA ATUAL - Google OAuth Funciona Mas Sessão Não Persiste
+**DATA**: 12/01/2026
+**PROGRESSO**:
+✅ Cloudflare Access completamente removido (aplicativo, regras, usuários deletados no Zero Trust)
+✅ Botão "Entrar com Google" agora redireciona corretamente para Google OAuth
+✅ Login no Google funciona
+
+**SINTOMA ATUAL**:
+❌ Após callback do Google, volta para tela de login (/admin)
+❌ Cookie admin_session não está sendo criado OU não está sendo lido
+❌ Fica em loop: clica "Entrar com Google" → autentica → volta para tela de login
+
+**HIPÓTESES**:
+- [ ] Cookie não está sendo criado no callback (verificar Set-Cookie header)
+- [ ] Cookie está sendo criado mas com configurações erradas (Domain, Path, SameSite)
+- [ ] Cookie está sendo criado mas navegador está bloqueando (Secure flag sem HTTPS)
+- [ ] Cookie está sendo criado mas context.ts não está lendo corretamente
+- [ ] Email não está passando na validação de ADMIN_EMAILS
+
+**AÇÕES**:
+- [ ] Criar endpoint de debug para verificar cookies
+- [ ] Analisar configurações de cookie no callback
+- [ ] Verificar se ADMIN_EMAILS está correto
+- [ ] Testar localmente para reproduzir problema
