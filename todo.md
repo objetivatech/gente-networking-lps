@@ -498,3 +498,29 @@
 - [ ] Analisar configurações de cookie no callback
 - [ ] Verificar se ADMIN_EMAILS está correto
 - [ ] Testar localmente para reproduzir problema
+
+
+## DESCOBERTA - Cookie Criado Mas Context Não Lê
+**DATA**: 13/01/2026
+**DIAGNÓSTICO COMPLETO**:
+✅ Cookie admin_session ESTÁ SENDO CRIADO corretamente
+✅ Cookie ESTÁ SENDO ENVIADO nas requisições (confirmado via /api/debug/session)
+✅ Email correto: ranktopseoestrategico@gmail.com
+✅ Variáveis de ambiente configuradas corretamente
+❌ context.ts NÃO ESTÁ LENDO o cookie admin_session
+
+**EVIDÊNCIAS**:
+```json
+"adminSession": "eyJlbWFpbCI6InJhbmt0b3BzZW9lc3RyYXRlZ2ljb0BnbWFpbC5jb20i..."
+```
+Cookie presente e válido!
+
+**CAUSA RAIZ**:
+O context.ts deve estar usando método diferente de leitura de cookies
+OU está procurando em lugar errado
+OU a lógica de validação está falhando
+
+**AÇÃO**:
+- [ ] Analisar context.ts linha por linha
+- [ ] Verificar como está lendo cookies
+- [ ] Corrigir leitura para funcionar com Cloudflare Pages
