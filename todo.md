@@ -448,3 +448,27 @@
 - [ ] Commit e push
 - [ ] Redeploy no Cloudflare Pages
 - [ ] Testar em aba anônima (sem cookies antigos)
+
+
+## PROBLEMA CRÍTICO URGENTE - Cloudflare Access AINDA Ativo
+**DATA**: 12/01/2026
+**SINTOMA**: 
+❌ Mesmo após remover CF_ACCESS_TEAM_DOMAIN do wrangler.toml
+❌ Testado em 3 navegadores diferentes em aba anônima
+❌ TODOS redirecionam para tela de autenticação do Cloudflare Access
+❌ Botão "Entrar com Google" leva para CA, não para Google OAuth
+
+**HIPÓTESES**:
+- [ ] Código TypeScript/JavaScript ainda chamando Cloudflare Access
+- [ ] Middleware (_middleware.ts) interceptando requisições
+- [ ] Arquivo de configuração adicional (functions/_middleware.ts)
+- [ ] Código no client/src chamando CA
+- [ ] Variáveis de ambiente no Cloudflare Pages ainda ativas
+
+**AÇÕES URGENTES**:
+- [x] Buscar TODAS referências a "cloudflare" "access" "CF_ACCESS" no código
+- [x] Verificar se existe _middleware.ts (não existe)
+- [x] Analisar TODOS os arquivos de autenticação
+- [x] ENCONTRADO: functions/api/auth/login.ts estava forçando Cloudflare Access
+- [x] DELETADO: functions/api/auth/login.ts
+- [ ] Commit, push e testar
