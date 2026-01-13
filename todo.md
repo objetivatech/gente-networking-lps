@@ -584,3 +584,16 @@ OU está usando método antigo do Manus Auth
 - [x] Substituir Buffer.from por btoa (nativo do browser)
 - [x] Substituir createHmac por crypto.subtle (Web Crypto API)
 - [ ] Deploy e validar
+
+
+## PROBLEMA - Login funciona mas sessão não persiste
+**DATA**: 13/01/2026
+**SINTOMA**: Mensagem "Login realizado com sucesso" aparece, mas página recarrega e volta para form de login
+**CAUSA IDENTIFICADA**: context.ts usava crypto.subtle.digest (hash simples) enquanto simple-login.ts usava crypto.subtle.sign (HMAC)
+**SOLUÇÃO**: Atualizar context.ts para usar mesma Web Crypto API
+
+- [x] Verificar código de validação no context.ts
+- [x] Identificar diferença: digest vs sign (HMAC)
+- [x] Criar função verifyCookie() idêntica à signCookie()
+- [x] Atualizar context.ts para usar HMAC-SHA256
+- [ ] Deploy e validar
